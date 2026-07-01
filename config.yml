@@ -1,0 +1,3 @@
+emulator_url: "https://localhost:5000"
+timeout: 30
+output_path: "./reports"
