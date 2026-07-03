@@ -59,3 +59,20 @@ class HttpClient:
         except requests.exceptions.Timeout:
             logger.error(f"Таймаут: {url}")
             return None 
+    def get_members(self, endpoint):
+        response = self.get(endpoint)
+        if response is None:
+            return []
+        members = response.json().get("Members", [])
+        results = []
+        for member in members:
+            url = member.get("@odata.id")
+            if url:
+                r = self.get(url)
+                if r:
+                    results.append(r)
+        return results
+
+    def ping(self):
+        response = self.get("/redfish/v1/")
+        return response is not None and response.status_code == 200
