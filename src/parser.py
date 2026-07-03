@@ -18,4 +18,10 @@ class UniversalSchemaParser:
       print(f"Ошибка загрузки {filepath}: {e}")
       return {}
   
+  def get_resource_name(self, filename: str) -> str:
+    match = re.match(r'([A-Za-z]+)\.v', filename)
+    if match:
+      return match.group(1)
+    return filename.replace('.json', '')
+  
   
