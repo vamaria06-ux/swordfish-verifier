@@ -5,6 +5,7 @@ import logging
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 logger = logging.getLogger(__name__)
 
+
 class HttpClient:
 
     def __init__(self, config):
@@ -17,6 +18,7 @@ class HttpClient:
                 config.auth["username"],
                 config.auth["password"]
             )
+
     def get(self, endpoint):
         url = self.base_url + endpoint
         logger.info(f"GET {url}")
@@ -58,7 +60,8 @@ class HttpClient:
             return None
         except requests.exceptions.Timeout:
             logger.error(f"Таймаут: {url}")
-            return None 
+            return None
+
     def get_members(self, endpoint):
         response = self.get(endpoint)
         if response is None:
