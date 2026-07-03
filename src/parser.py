@@ -24,4 +24,12 @@ class UniversalSchemaParser:
       return match.group(1)
     return filename.replace('.json', '')
   
+  def extract_definition(self, schema: Dict, resource: str) -> Dict:
+    definitions = schema.get('definitions', {})
+    if resource in definitions:
+      return definitions[resource]
+    if len(definitions) == 1:
+      return list(definitions.values())[0]
+    return {}
+  
   
