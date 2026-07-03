@@ -14,7 +14,7 @@ import yaml
 
 
 class ConfigError(Exception):
-    """Ошибка конфигурации: файл не найден, пуст или не хватает обязательного поля."""
+    """Config error: File not find or mandatory data empty"""
 
 
 @dataclass
@@ -50,26 +50,25 @@ class Config:
 
 def load_config(path: str = "config.yaml") -> Config:
     """
-    Читает YAML-файл по пути `path` и возвращает провалидированный Config.
+    Read YAML by the way `path` return the Config.
 
-    :raises ConfigError: если файла нет, он пустой, или отсутствует
-                          обязательное поле emulator.url
+    :raises ConfigError: if fiel not find, wasted,  empty, or mandatory data emulator.url
     """
     config_path = Path(path)
     if not config_path.exists():
-        raise ConfigError(f"Файл конфигурации не найден: {path}")
+        raise ConfigError(f"configurating fiel not fond: {path}")
 
     with open(config_path, "r", encoding="utf-8") as f:
         raw = yaml.safe_load(f)
 
     if raw is None:
-        raise ConfigError(f"Файл конфигурации пуст: {path}")
+        raise ConfigError(f"configurating fiel bad: {path}")
 
     emulator_raw = raw.get("emulator")
     if not emulator_raw or "url" not in emulator_raw:
         raise ConfigError(
-            "В config.yaml отсутствует обязательное поле emulator.url — "
-            "без него http_client.py не будет знать, куда стучаться"
+            "В config.yaml not mandatory data emulator.url — "
+            " http_client.py not working "
         )
 
     auth_raw = raw.get("auth") or {}
