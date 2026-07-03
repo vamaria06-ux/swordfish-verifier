@@ -7,7 +7,7 @@ from config import load_config, ConfigError
  
  
 def test_load_valid_config(tmp_path):
-    """Корректный config.yaml должен загружаться без ошибок"""
+    """Correct config.yaml starting and working no fail """
     config_file = tmp_path / "config.yaml"
     config_file.write_text("""
 emulator:
@@ -33,13 +33,13 @@ filters:
  
  
 def test_missing_file_raises_error():
-    """Если файла нет — должна быть понятная ошибка, а не падение с трейсбеком"""
+    """Have not fiel  — error should be informative and clear, no fail"""
     with pytest.raises(ConfigError, match="не найден"):
-        load_config("несуществующий_файл.yaml")
+        load_config("not exist -> load mistake.yaml")
  
  
 def test_empty_file_raises_error(tmp_path):
-    """Пустой файл — тоже ошибка конфигурации, а не молчаливый None"""
+    """Empty fiel — config wrong due to none in"""
     config_file = tmp_path / "config.yaml"
     config_file.write_text("")
  
@@ -48,7 +48,7 @@ def test_empty_file_raises_error(tmp_path):
  
  
 def test_missing_url_raises_error(tmp_path):
-    """Без emulator.url http_client.py не будет знать, куда стучаться"""
+    """No emulator.url http_client.py no address to config"""
     config_file = tmp_path / "config.yaml"
     config_file.write_text("""
 emulator:
@@ -59,7 +59,7 @@ emulator:
  
  
 def test_defaults_applied_when_optional_fields_missing(tmp_path):
-    """Если auth/specification/filters вообще нет в файле — должны примениться дефолты"""
+    """auth/specification/filters not filled — necessary"""
     config_file = tmp_path / "config.yaml"
     config_file.write_text("""
 emulator:
