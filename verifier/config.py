@@ -6,7 +6,7 @@ import yaml
  
  
 class ConfigError(Exception):
-    """Ошибка конфигурации: файл не найден, пуст или не хватает обязательного поля."""
+    """Config Failed: Mandatory filled wrong, file is empty or wrong way to build"""
  
  
 @dataclass
@@ -32,35 +32,34 @@ REQUIRED_FIELDS = ["specification_path", "emulator_url", "timeout", "output_path
  
 def load_config(path: str = "config.yaml") -> Config:
     """
-    Читает YAML-файл по пути `path` и возвращает провалидированный Config.
+    Read YAML-file `path` and return vlid Config.
  
-    :raises ConfigError: если файла нет, он пустой, или отсутствует
-                          одно из обязательных полей
+    :raises ConfigError: Mandatory filled wrong, file is empty or wrong way to build
     """
     config_path = Path(path)
     if not config_path.exists():
-        raise ConfigError(f"Файл конфигурации не найден: {path}")
+        raise ConfigError(f"Configurating file didnt find: {path}")
  
     with open(config_path, "r", encoding="utf-8") as f:
         raw = yaml.safe_load(f)
  
     if raw is None:
-        raise ConfigError(f"Файл конфигурации пуст: {path}")
+        raise ConfigError(f"Configurating file is none: {path}")
  
     missing = [name for name in REQUIRED_FIELDS if name not in raw]
     if missing:
         raise ConfigError(
-            f"В config.yaml отсутствуют обязательные поля: {', '.join(missing)}"
+            f"В config.yaml mandatory field not filled: {', '.join(missing)}"
         )
  
     spec_path = Path(raw["specification_path"])
     if not spec_path.exists():
         raise ConfigError(
-            f"specification_path указывает на несуществующий путь: {spec_path}"
+            f"specification_path wrong way: {spec_path}"
         )
     if not spec_path.is_dir():
         raise ConfigError(
-            f"specification_path должен быть директорией со схемами (*.json), "
+            f"specification_path have to have directory (*.json), "
             f"а не файлом: {spec_path}"
         )
  
