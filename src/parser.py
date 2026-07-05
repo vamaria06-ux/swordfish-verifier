@@ -75,4 +75,16 @@ class UniversalSchemaParser:
     
     return info
     
+    def extract_enums(self, definitions: Dict) -> Dict[str, List[str]]:
+      enums = {}
+      for name, definition in definitions.items():
+        if 'enum' in definition:
+          enums[name] = definition['enum']
+        if 'properties' in definition:
+          for prop_name, prop_details in definition['properties'].items():
+            if 'enum' in prop_details:
+              enums[f"{name}.{prop_name}"] = prop_details['enum']
+      return enums
     
+    
+  
