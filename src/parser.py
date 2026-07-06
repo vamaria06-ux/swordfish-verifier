@@ -154,4 +154,75 @@ class UniversalSchemaParser:
       
       return rules
         
+    def get_latest_file(self, files: List[str], resource: str) -> Optional[str]:
+      pattern = re.compile(rf'{resource}\.v(\d+)\.(\d+)\.(\d+)\.json')
+      latest = None
+      latest_version = (-1, -1, -1)
+      
+      for filename in files:
+        match = pattern.match(filename)
+        if match:
+          major, minor, patch = map(int, match.groups())
+          if (major, minor, patch) > latest_version:
+            latest_version = (major, minor, patch)
+            latest = filename
+      
+      return latest
     
+    def parse_all(self, resources_filter: Optional[List[str]] = None) -> Dict:
+      all_files = os.listdir(self.schemas_dir)
+      
+      json_files = [
+        f for f in all_files
+        if f.endswith('.json') and ':Zone.Identifier' not in f
+      ]
+      
+      resources = {}
+      for filename in json_files:
+        resource = self.get_resource_name(filename)
+        if resource not in resources:
+          resources[resource] = []
+        resources[resource].append(filename)
+      
+      if resources_filter:
+        resources = {
+          r: files for r, files in resources.items()
+          if r in resources_filter
+        }
+      
+      print(f"📂 Найдено ресурсов: {len(resources)}")
+      
+      for resource, files in resources.items():
+        latest_file = self.get_latest_file(files, resource)
+        if latest_file:
+          filepath = os.path.join(self.schemas_dir, latest_file)
+          print(f"📄 Парсинг {resource}: {latest_file}")
+          rules = self.parse_resource(filepath)
+          if rules:
+            self.rules[resource] = rules
+      
+      return self.rules
+    
+    def save_rules(self, output_path: str):
+      with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(self.rules, f, indent=2, ensure_ascii=False)
+      print(f"✅ Правила сохранены в {output_path}")
+    
+    def get_rules(self, resource: str) -> Optional[Dict]:
+      return self.rules.get(resource)
+
+if __name__ == "__main__":
+  schemas_dir = "data/schemas/json-schema"
+  
+  parser = UniversalSchemaParser(schemas_dir)
+  
+  resources_to_parse = [
+    "Volume",
+    "StoragePool", 
+    "Drive",
+    "StorageSystem",
+    "ComputerSystem"
+  ]
+  
+  rules = parser.parse_all(resources_filter=resources_to_parse)
+  parser.save_rules("data/rules.json")
