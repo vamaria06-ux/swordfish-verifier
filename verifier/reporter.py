@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+
 def count_statuses(checks: list[dict[str, Any]]) -> dict[str, int]:
     stats = {
         "total": len(checks),
@@ -17,6 +18,7 @@ def count_statuses(checks: list[dict[str, Any]]) -> dict[str, int]:
             stats[status] += 1
 
     return stats
+
 
 def build_report(
     checks: list[dict[str, Any]],
@@ -34,6 +36,7 @@ def build_report(
         "summary": count_statuses(checks),
         "checks": checks,
     }
+
 
 def save_report(
     report: dict[str, Any],
