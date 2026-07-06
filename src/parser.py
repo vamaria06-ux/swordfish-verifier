@@ -75,141 +75,148 @@ class UniversalSchemaParser:
     
     return info
     
-    def extract_enums(self, definitions: Dict) -> Dict[str, List[str]]:
-      enums = {}
-      for name, definition in definitions.items():
-        if 'enum' in definition:
-          enums[name] = definition['enum']
-        if 'properties' in definition:
-          for prop_name, prop_details in definition['properties'].items():
-            if 'enum' in prop_details:
-              enums[f"{name}.{prop_name}"] = prop_details['enum']
-    
-      return enums
+  def extract_enums(self, definitions: Dict) -> Dict[str, List[str]]:
+    enums = {}
+    for name, definition in definitions.items():
+      if 'enum' in definition:
+        enums[name] = definition['enum']
+      if 'properties' in definition:
+        for prop_name, prop_details in definition['properties'].items():
+          if 'enum' in prop_details:
+            enums[f"{name}.{prop_name}"] = prop_details['enum']
+  
+    return enums
 
-    def parse_resource(self, filepath: str) -> Optional[Dict]:
-      filename = os.path.basename(filepath)
-      resource = self.get_resource_name(filename)
-      
-      schema = self.load_file(filepath)
-      if not schema:
-        return None
-      
-      definitions = schema.get('definitions', {})
-      
-      definition = self.extract_definition(schema, resource)
-      if not definition:
-        print(f"⚠️ Не найдено определение для {resource}")
-        return None
-      
-      properties = definition.get('properties', {})
-      fields = {}
-      for field_name, field_details in properties.items():
-        fields[field_name] = self.extract_field_info(
-          field_name, field_details, definitions
-        )
-      
-      required_fields = definition.get('required', [])
-      enums = self.extract_enums(definitions)
-      
-      actions = {}
-      if 'Actions' in definitions:
-        actions_def = definitions['Actions']
-        actions_props = actions_def.get('properties', {})
-        for action_name, action_details in actions_props.items():
-          if action_name.startswith(f'#{resource}.'):
-            actions[action_name] = {
-              "$ref": action_details.get('$ref', ''),
-              "description": action_details.get('description', ''),
-              "versionAdded": action_details.get('versionAdded', '')
-              }
-      
-      links = {}
-      if 'Links' in definitions:
-        links_def = definitions['Links']
-        links = {
-          "description": links_def.get('description', ''),
-          "properties": {}
-        }
-        for link_name, link_details in links_def.get('properties', {}).items():
-          links["properties"][link_name] = {
-            "description": link_details.get('description', ''),
-            "type": link_details.get('type', 'array'),
-            "readonly": link_details.get('readonly', True)
-          }
-          if '$ref' in link_details:
-            links["properties"][link_name]['$ref'] = link_details['$ref']
-          if 'items' in link_details:
-            links["properties"][link_name]['items'] = link_details['items']
+  def parse_resource(self, filepath: str) -> Optional[Dict]:
+    filename = os.path.basename(filepath)
+    resource = self.get_resource_name(filename)
     
-      rules = {
-        "resource": resource,
-        "version": schema.get('release', 'unknown'),
-        "required_fields": required_fields,
-        "fields": fields,
-        "enums": enums,
-        "actions": actions if actions else None,
-        "links": links if links else None
+    schema = self.load_file(filepath)
+    if not schema:
+      return None
+    
+    definitions = schema.get('definitions', {})
+    
+    definition = self.extract_definition(schema, resource)
+    if not definition:
+      print(f"⚠️ Не найдено определение для {resource}")
+      return None
+    
+    properties = definition.get('properties', {})
+    fields = {}
+    for field_name, field_details in properties.items():
+      fields[field_name] = self.extract_field_info(
+        field_name, field_details, definitions
+      )
+    
+    required_fields = definition.get('required', [])
+    enums = self.extract_enums(definitions)
+    
+    actions = {}
+    if 'Actions' in definitions:
+      actions_def = definitions['Actions']
+      actions_props = actions_def.get('properties', {})
+      for action_name, action_details in actions_props.items():
+        if action_name.startswith(f'#{resource}.'):
+          actions[action_name] = {
+            "$ref": action_details.get('$ref', ''),
+            "description": action_details.get('description', ''),
+            "versionAdded": action_details.get('versionAdded', '')
+            }
+    
+    links = {}
+    if 'Links' in definitions:
+      links_def = definitions['Links']
+      links = {
+        "description": links_def.get('description', ''),
+        "properties": {}
       }
-      
-      return rules
-        
-    def get_latest_file(self, files: List[str], resource: str) -> Optional[str]:
-      pattern = re.compile(rf'{resource}\.v(\d+)\.(\d+)\.(\d+)\.json')
-      latest = None
-      latest_version = (-1, -1, -1)
-      
-      for filename in files:
-        match = pattern.match(filename)
-        if match:
-          major, minor, patch = map(int, match.groups())
-          if (major, minor, patch) > latest_version:
-            latest_version = (major, minor, patch)
-            latest = filename
-      
-      return latest
-    
-    def parse_all(self, resources_filter: Optional[List[str]] = None) -> Dict:
-      all_files = os.listdir(self.schemas_dir)
-      
-      json_files = [
-        f for f in all_files
-        if f.endswith('.json') and ':Zone.Identifier' not in f
-      ]
-      
-      resources = {}
-      for filename in json_files:
-        resource = self.get_resource_name(filename)
-        if resource not in resources:
-          resources[resource] = []
-        resources[resource].append(filename)
-      
-      if resources_filter:
-        resources = {
-          r: files for r, files in resources.items()
-          if r in resources_filter
+      for link_name, link_details in links_def.get('properties', {}).items():
+        links["properties"][link_name] = {
+          "description": link_details.get('description', ''),
+          "type": link_details.get('type', 'array'),
+          "readonly": link_details.get('readonly', True)
         }
-      
-      print(f"📂 Найдено ресурсов: {len(resources)}")
-      
-      for resource, files in resources.items():
-        latest_file = self.get_latest_file(files, resource)
-        if latest_file:
-          filepath = os.path.join(self.schemas_dir, latest_file)
-          print(f"📄 Парсинг {resource}: {latest_file}")
-          rules = self.parse_resource(filepath)
-          if rules:
-            self.rules[resource] = rules
-      
-      return self.rules
+        if '$ref' in link_details:
+          links["properties"][link_name]['$ref'] = link_details['$ref']
+        if 'items' in link_details:
+          links["properties"][link_name]['items'] = link_details['items']
+  
+    rules = {
+      "resource": resource,
+      "version": schema.get('release', 'unknown'),
+      "required_fields": required_fields,
+      "fields": fields,
+      "enums": enums,
+      "actions": actions if actions else None,
+      "links": links if links else None
+    }
     
-    def save_rules(self, output_path: str):
-      with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(self.rules, f, indent=2, ensure_ascii=False)
-      print(f"✅ Правила сохранены в {output_path}")
+    return rules
+      
+  def get_latest_file(self, files: List[str], resource: str) -> Optional[str]:
+    latest = None
+    latest_version = (-1, -1, -1)
     
-    def get_rules(self, resource: str) -> Optional[Dict]:
-      return self.rules.get(resource)
+    for filename in files:
+      if ':Zone.Identifier' in filename:
+        continue
+
+      match = re.search(r'\.v(\d+)\.(\d+)\.(\d+)\.json$', filename)
+      
+      if match:           
+        major, minor, patch = map(int, match.groups())
+        version = (major, minor, patch)
+      else:          
+        version = (0, 0, 0)
+              
+      if version > latest_version:
+        latest_version = version
+        latest = filename
+    
+    return latest
+  
+  def parse_all(self, resources_filter: Optional[List[str]] = None) -> Dict:
+    all_files = os.listdir(self.schemas_dir)
+    
+    json_files = [
+      f for f in all_files
+      if f.endswith('.json') and ':Zone.Identifier' not in f
+    ]
+
+    resources = {}
+    for filename in json_files:
+      resource = self.get_resource_name(filename)
+      if resource not in resources:
+        resources[resource] = []
+      resources[resource].append(filename)
+    
+    if resources_filter:
+      resources = {
+        r: files for r, files in resources.items()
+        if r in resources_filter
+      }
+    
+    print(f"📂 Найдено ресурсов: {len(resources)}")
+    
+    for resource, files in resources.items():
+      latest_file = self.get_latest_file(files, resource)
+      if latest_file:
+        filepath = os.path.join(self.schemas_dir, latest_file)
+        print(f"📄 Парсинг {resource}: {latest_file}")
+        rules = self.parse_resource(filepath)
+        if rules:
+          self.rules[resource] = rules
+    
+    return self.rules
+  
+  def save_rules(self, output_path: str):
+    with open(output_path, 'w', encoding='utf-8') as f:
+      json.dump(self.rules, f, indent=2, ensure_ascii=False)
+    print(f"✅ Правила сохранены в {output_path}")
+  
+  def get_rules(self, resource: str) -> Optional[Dict]:
+    return self.rules.get(resource)
 
 if __name__ == "__main__":
   schemas_dir = "data/schemas/json-schema"
