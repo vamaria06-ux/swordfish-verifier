@@ -1,0 +1,14 @@
+emulator_url: "https://localhost:5000"
+timeout: 30
+output_path: "./reports"
+
+auth:
+  type: "basic"
+  username: "Administrator"
+  password: "Password"
+
+resources_filter:
+  - "StorageSystems"
+  - "StoragePools"
+  - "Volumes"
+  - "Drives"
