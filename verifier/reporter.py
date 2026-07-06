@@ -34,3 +34,18 @@ def build_report(
         "summary": count_statuses(checks),
         "checks": checks,
     }
+
+def save_report(
+    report: dict[str, Any],
+    output_path: str,
+    filename: str = "report.json",
+) -> Path:
+    output_dir = Path(output_path)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    report_path = output_dir / filename
+
+    with open(report_path, "w", encoding="utf-8") as file:
+        json.dump(report, file, indent=2, ensure_ascii=False)
+
+    return report_path
