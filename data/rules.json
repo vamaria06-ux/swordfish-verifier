@@ -1,0 +1,187 @@
+{
+  "ServiceRoot": {
+    "endpoint": "/redfish/v1/",
+    "method": "GET",
+    "expected_status": 200,
+    "spec_section": "Раздел 8.3 — Discovering Swordfish resources",
+    "spec_url": "https://www.snia.org/sites/default/files/technical-work/swordfish/draft/v1.2.9/html/Specification/Swordfish_v1.2.9_Specification.html",
+    "dynamic": false,
+    "required_fields": {
+      "@odata.type": {
+        "type": "str",
+        "description": "Тип ресурса OData",
+        "spec": "Раздел 7.2 — Schema Considerations"
+      },
+      "@odata.id": {
+        "type": "str",
+        "description": "Уникальный идентификатор ресурса",
+        "spec": "Раздел 7.2 — Schema Considerations"
+      },
+      "Id": {
+        "type": "str",
+        "description": "Строковый идентификатор ресурса",
+        "spec": "Таблица 9 — Universal properties"
+      },
+      "Name": {
+        "type": "str",
+        "description": "Имя ресурса",
+        "spec": "Таблица 9 — Universal properties"
+      },
+      "RedfishVersion": {
+        "type": "str",
+        "description": "Версия Redfish API",
+        "spec": "Раздел 8.1 — Service Root"
+      }
+    }
+  },
+  "Systems": {
+    "endpoint": "/redfish/v1/Systems",
+    "method": "GET",
+    "expected_status": 200,
+    "spec_section": "Раздел 5 — Swordfish Overview",
+    "spec_url": "https://www.snia.org/sites/default/files/technical-work/swordfish/draft/v1.2.9/html/Specification/Swordfish_v1.2.9_Specification.html",
+    "dynamic": false,
+    "required_fields": {
+      "@odata.type": {
+        "type": "str",
+        "description": "Тип коллекции OData",
+        "spec": "Раздел 7.2 — Schema Considerations"
+      },
+      "@odata.id": {
+        "type": "str",
+        "description": "Уникальный идентификатор",
+        "spec": "Раздел 7.2 — Schema Considerations"
+      },
+      "Members": {
+        "type": "list",
+        "description": "Список систем",
+        "spec": "Раздел 5 — Swordfish Overview"
+      },
+      "Members@odata.count": {
+        "type": "int",
+        "description": "Количество систем",
+        "spec": "Раздел 5 — Swordfish Overview"
+      }
+    }
+  },
+  "StorageSystems": {
+    "endpoint": "/redfish/v1/StorageSystems",
+    "method": "GET",
+    "expected_status": 200,
+    "spec_section": "Таблица 147 — StorageSystemCollection",
+    "spec_url": "https://www.snia.org/sites/default/files/technical-work/swordfish/draft/v1.2.9/html/Specification/Swordfish_v1.2.9_Specification.html",
+    "dynamic": false,
+    "required_fields": {
+      "@odata.type": {
+        "type": "str",
+        "description": "Тип коллекции OData",
+        "spec": "Раздел 7.2 — Schema Considerations"
+      },
+      "@odata.id": {
+        "type": "str",
+        "description": "Уникальный идентификатор коллекции",
+        "spec": "Раздел 7.2 — Schema Considerations"
+      },
+      "Members": {
+        "type": "list",
+        "description": "Список систем хранения",
+        "spec": "Таблица 147 — StorageSystemCollection"
+      },
+      "Members@odata.count": {
+        "type": "int",
+        "description": "Количество систем хранения",
+        "spec": "Таблица 147 — StorageSystemCollection"
+      }
+    }
+  },
+  "StoragePools": {
+    "endpoint": "{system_url}/StoragePools",
+    "method": "GET",
+    "expected_status": 200,
+    "spec_section": "Таблица 129 — StoragePool 1.9.2",
+    "spec_url": "https://www.snia.org/sites/default/files/technical-work/swordfish/draft/v1.2.9/html/Specification/Swordfish_v1.2.9_Specification.html",
+    "dynamic": true,
+    "required_fields": {
+      "@odata.type": {
+        "type": "str",
+        "description": "Тип коллекции StoragePool",
+        "spec": "Таблица 129 — StoragePool 1.9.2"
+      },
+      "@odata.id": {
+        "type": "str",
+        "description": "Уникальный идентификатор коллекции",
+        "spec": "Раздел 7.2 — Schema Considerations"
+      },
+      "Members": {
+        "type": "list",
+        "description": "Список пулов хранения",
+        "spec": "Таблица 129 — StoragePool 1.9.2"
+      },
+      "Members@odata.count": {
+        "type": "int",
+        "description": "Количество пулов хранения",
+        "spec": "Таблица 129 — StoragePool 1.9.2"
+      }
+    }
+  },
+  "Volumes": {
+    "endpoint": "{system_url}/Volumes",
+    "method": "GET",
+    "expected_status": 200,
+    "spec_section": "Таблица 148 — Volume 1.11.0",
+    "spec_url": "https://www.snia.org/sites/default/files/technical-work/swordfish/draft/v1.2.9/html/Specification/Swordfish_v1.2.9_Specification.html",
+    "dynamic": true,
+    "required_fields": {
+      "@odata.type": {
+        "type": "str",
+        "description": "Тип коллекции Volume",
+        "spec": "Таблица 148 — Volume 1.11.0"
+      },
+      "@odata.id": {
+        "type": "str",
+        "description": "Уникальный идентификатор коллекции",
+        "spec": "Раздел 7.2 — Schema Considerations"
+      },
+      "Members": {
+        "type": "list",
+        "description": "Список томов хранения",
+        "spec": "Таблица 148 — Volume 1.11.0"
+      },
+      "Members@odata.count": {
+        "type": "int",
+        "description": "Количество томов",
+        "spec": "Таблица 148 — Volume 1.11.0"
+      }
+    }
+  },
+  "Drives": {
+    "endpoint": "{system_url}/Drives",
+    "method": "GET",
+    "expected_status": 200,
+    "spec_section": "Раздел 5 — Swordfish Overview",
+    "spec_url": "https://www.snia.org/sites/default/files/technical-work/swordfish/draft/v1.2.9/html/Specification/Swordfish_v1.2.9_Specification.html",
+    "dynamic": true,
+    "required_fields": {
+      "@odata.type": {
+        "type": "str",
+        "description": "Тип коллекции Drive",
+        "spec": "Раздел 5 — Swordfish Overview"
+      },
+      "@odata.id": {
+        "type": "str",
+        "description": "Уникальный идентификатор коллекции",
+        "spec": "Раздел 7.2 — Schema Considerations"
+      },
+      "Members": {
+        "type": "list",
+        "description": "Список физических дисков",
+        "spec": "Раздел 5 — Swordfish Overview"
+      },
+      "Members@odata.count": {
+        "type": "int",
+        "description": "Количество дисков",
+        "spec": "Раздел 5 — Swordfish Overview"
+      }
+    }
+  }
+}
