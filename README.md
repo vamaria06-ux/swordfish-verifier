@@ -50,7 +50,7 @@ pip install -r requirements.txt
 | `output_path`       | да  | Папка для сохранения `report.json`                                   |
 | `rules_path`        | нет | Путь к заранее сохранённому файлу правил (`Parser.save_rules`)        |
 | `auth`              | нет | `username`/`password` для Basic Auth                                 |
-| `resources_filter`  | нет | Список ресурсов для проверки; если не задан — проверяются все ресурсы |
+| `resources_filter` | нет | Список ресурсов для проверки; если не задан — проверяются строго 6 базовых ресурсов (ServiceRoot, Systems, StorageSystems, StoragePools, Volumes, Drives) |
 
 В репозитории есть два готовых конфига:
 
@@ -130,9 +130,6 @@ config.yml / config_mock.yml Примеры конфигурации
 
 ## Известные ограничения
 
-- Mock-сервер (`mock_server/broken_server.py`) пока покрывает только
-  `ServiceRoot`, `Systems`, `StorageSystems` и `StorageServices`; для
-  `StoragePools`/`Volumes`/`Drives` (динамические ресурсы, зависящие от
-  `{system_url}`) потребуется отдельное расширение с динамическим роутингом.
+- Mock-сервер (`mock_server/broken_server.py`) покрывает все 6 базовых ресурсов: `ServiceRoot`, `Systems`, `StorageSystems`, а также динамические `StoragePools`/`Volumes`/`Drives` под `/redfish/v1/StorageSystems/1/...` (для их обнаружения `main.py` при недоступном `StorageSystems` использует `Systems` как запасной источник id системы).
 - Автоматический парсинг спецификации поддерживает только формат JSON-схем
   SNIA; PDF/XML/YML версии спецификации не разбираются.
