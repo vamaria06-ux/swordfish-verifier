@@ -182,6 +182,7 @@ class Validator:
                 actual=str(response.status_code),
                 spec_section="Раздел 8.5 — HTTP status codes"
             ))
+            return results
 
         #Проверка 3: Валидный JSON
         try:
