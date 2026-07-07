@@ -8,10 +8,13 @@ class Reporter:
     """Формирует и сохраняет отчёт по результатам проверки."""
 
     def generate(self, all_results: list[dict[str, Any]], config) -> dict[str, Any]:
+        by_resource = self._group_by_resource(all_results)
         report = {
             "metadata": self._build_metadata(config),
             "summary": self._build_summary(all_results),
-            "by_resource": self._group_by_resource(all_results),
+            "resources_checked": len(by_resource),
+            "errors": self._extract_errors(all_results),
+            "by_resource": by_resource,
             "all_checks": all_results,
         }
 
@@ -23,16 +26,18 @@ class Reporter:
             "version": "1.0",
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "emulator_url": config.emulator_url,
-            "spec_version": "Swordfish v1.2.9",
+            "spec_version": getattr(
+                config,
+                "spec_version",
+                "Swordfish v1.2.9",
+            ),
         }
 
     def _build_summary(self, all_results: list[dict[str, Any]]) -> dict[str, Any]:
         total = len(all_results)
         passed = sum(1 for r in all_results if r.get("status") == "PASS")
         failed = sum(1 for r in all_results if r.get("status") == "FAIL")
-        not_supported = sum(
-            1 for r in all_results if r.get("status") == "NOT_SUPPORTED"
-        )
+        not_supported = sum(1 for r in all_results if r.get("status") == "NOT_SUPPORTED")
 
         return {
             "total": total,
@@ -71,6 +76,19 @@ class Reporter:
             by_resource[resource]["checks"].append(result)
 
         return by_resource
+
+    def _extract_errors(
+        self,
+        all_results: list[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
+
+        errors = []
+
+        for result in all_results:
+            if result.get("status") == "FAIL":
+                errors.append(result)
+
+        return errors
 
     def _save_json(
         self,
