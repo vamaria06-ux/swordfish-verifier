@@ -102,7 +102,7 @@ def test_run_checks_checks_every_dynamic_resource_when_system_available():
     client.get.side_effect = get
 
     validator = MagicMock()
-    validator.validate.return_value = [{"status": "PASS"}]
+    validator.validate.return_value = [{"status": "PASS", "check": "dummy"}]
 
     run_checks(client, validator, _dynamic_rules())
 
