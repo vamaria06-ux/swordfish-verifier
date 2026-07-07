@@ -285,7 +285,7 @@ def validate_resource(
         список словарей, каждый из которых описывает одну проверку поля:
         {
             "check":        "Поле: Id",
-            "status":       "PASS" / "FAIL" / "NOT_SUPPORTED",
+            "status":       "PASS" / "FAIL",
             "detail":       "пояснение",
             "expected":     "ожидаемое значение",
             "actual":       "фактическое значение",
