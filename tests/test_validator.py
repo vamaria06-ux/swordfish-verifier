@@ -255,3 +255,111 @@ class TestTypeNames:
         """Все имена типов — строки."""
         assert all(isinstance(v, str) for v in TYPE_NAMES.values())
         
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Тесты для статуса NOT_SUPPORTED
+# ────────────────────────────────────────────────────────────────────────────
+
+class TestNotSupportedStatus:
+    """
+    NOT_SUPPORTED должен использоваться, когда верификатор не может выполнить
+    проверку (нет правила для ресурса или тип поля не распознан по схеме),
+    а не молча становиться PASS или ошибочным FAIL.
+    """
+
+    def test_validate_resource_without_rule_is_not_supported(self):
+        """Если для ресурса вообще нет правила -- статус NOT_SUPPORTED."""
+        validator = Validator()
+        results = validator.validate(response=None, rule={}, resource_name="UnknownResource")
+
+        assert len(results) == 1
+        assert results[0]["status"] == "NOT_SUPPORTED"
+        assert results[0]["resource"] == "UnknownResource"
+
+    def test_validate_resource_with_none_rule_is_not_supported(self):
+        """rule=None обрабатывается так же, как отсутствие правила."""
+        validator = Validator()
+        results = validator.validate(response=None, rule=None, resource_name="UnknownResource")
+
+        assert len(results) == 1
+        assert results[0]["status"] == "NOT_SUPPORTED"
+
+    def test_field_with_unresolvable_type_is_not_supported(self):
+        """Тип поля не распознан верификатором -> NOT_SUPPORTED, а не FAIL."""
+        data = {"WeirdField": "some value"}
+        required_fields = {
+            "WeirdField": {"type": "totally-unknown-type", "spec": "Раздел X"}
+        }
+
+        results = validate_resource(data, required_fields)
+
+        assert len(results) == 1
+        assert results[0]["status"] == "NOT_SUPPORTED"
+
+    def test_field_without_type_is_not_supported(self):
+        """Если тип поля вообще не задан в схеме -> NOT_SUPPORTED."""
+        data = {"WeirdField": "some value"}
+        required_fields = {
+            "WeirdField": {"spec": "Раздел X"}
+        }
+
+        results = validate_resource(data, required_fields)
+
+        assert len(results) == 1
+        assert results[0]["status"] == "NOT_SUPPORTED"
+
+    def test_missing_field_is_still_fail_not_not_supported(self):
+        """Отсутствие поля -- это FAIL, а не NOT_SUPPORTED, даже без типа."""
+        data = {}
+        required_fields = {
+            "MissingField": {"type": "totally-unknown-type"}
+        }
+
+        results = validate_resource(data, required_fields)
+
+        assert len(results) == 1
+        assert results[0]["status"] == "FAIL"
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Тесты для проверки enum-значений
+# ────────────────────────────────────────────────────────────────────────────
+
+class TestEnumValidation:
+    """Тесты валидации значений по списку допустимых (enum)."""
+
+    def test_enum_value_allowed(self):
+        data = {"Status": "Enabled"}
+        required_fields = {
+            "Status": {"type": str, "enum": ["Enabled", "Disabled"]}
+        }
+
+        results = validate_resource(data, required_fields)
+
+        assert len(results) == 1
+        assert results[0]["status"] == "PASS"
+
+    def test_enum_value_not_allowed(self):
+        data = {"Status": "Broken"}
+        required_fields = {
+            "Status": {"type": str, "enum": ["Enabled", "Disabled"]}
+        }
+
+        results = validate_resource(data, required_fields)
+
+        assert len(results) == 1
+        assert results[0]["status"] == "FAIL"
+        assert "Broken" in results[0]["detail"]
+
+    def test_no_enum_defined_just_checks_type(self):
+        """Если enum не задан в схеме -- проверяется только тип."""
+        data = {"Status": "AnyString"}
+        required_fields = {
+            "Status": {"type": str}
+        }
+
+        results = validate_resource(data, required_fields)
+
+        assert len(results) == 1
+        assert results[0]["status"] == "PASS"
