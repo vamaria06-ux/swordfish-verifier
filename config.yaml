@@ -1,0 +1,14 @@
+schemas_dir: "data/schemas/json-schema"
+emulator_url: "http://localhost:8080"
+timeout: 10
+output_path: "./reports"
+rules_path: "data/rules.json"
+auth:
+  username: "admin"
+  password: "admin"
+resources_filter:
+  - "Volume"
+  - "StoragePool"
+  - "Drive"
+
+  
