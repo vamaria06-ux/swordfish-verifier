@@ -1,0 +1,15 @@
+components:
+  schemas:
+    DataSecurityLineOfService_DataSecurityLineOfService:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataSecurityLineOfService.v1_1_1.yaml#/components/schemas/DataSecurityLineOfService_v1_1_1_DataSecurityLineOfService
+      description: The capabilities to protect the system data from loss.
+      x-longDescription: The capabilities to protect data from loss by the use of
+        a replica. The requirements must be met collectively by the communication
+        path and the replica. There will be one instance associated to a class of
+        service for each replica. Each replica has its own class of service that describes
+        its characteristics.
+title: '#DataSecurityLineOfService.DataSecurityLineOfService'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

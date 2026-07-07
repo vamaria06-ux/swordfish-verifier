@@ -1,0 +1,12 @@
+components:
+  schemas:
+    IOConnectivityLineOfService_IOConnectivityLineOfService:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/IOConnectivityLineOfService.v1_2_1.yaml#/components/schemas/IOConnectivityLineOfService_v1_2_1_IOConnectivityLineOfService
+      description: A service option within the IO Connectivity line of service.
+      x-longDescription: An IO connectivity service option may be used to specify
+        the characteristics of storage connectivity.
+title: '#IOConnectivityLineOfService.IOConnectivityLineOfService'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

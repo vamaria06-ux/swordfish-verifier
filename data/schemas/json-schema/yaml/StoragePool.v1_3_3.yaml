@@ -1,0 +1,535 @@
+components:
+  schemas:
+    StoragePool_v1_3_3_Actions:
+      additionalProperties: false
+      description: The available actions for this resource.
+      properties:
+        '#StoragePool.AddDrives':
+          $ref: '#/components/schemas/StoragePool_v1_3_3_AddDrives'
+        '#StoragePool.RemoveDrives':
+          $ref: '#/components/schemas/StoragePool_v1_3_3_RemoveDrives'
+        '#StoragePool.SetCompressionState':
+          $ref: '#/components/schemas/StoragePool_v1_3_3_SetCompressionState'
+        '#StoragePool.SetDeduplicationState':
+          $ref: '#/components/schemas/StoragePool_v1_3_3_SetDeduplicationState'
+        '#StoragePool.SetEncryptionState':
+          $ref: '#/components/schemas/StoragePool_v1_3_3_SetEncryptionState'
+        Oem:
+          $ref: '#/components/schemas/StoragePool_v1_3_3_OemActions'
+          description: This property contains the available OEM specific actions for
+            this resource.
+          x-longDescription: This property shall contain any additional OEM actions
+            for this resource.
+          x-versionAdded: v1_3_0
+      type: object
+      x-longDescription: The Actions property shall contain the available actions
+        for this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_AddDrives:
+      additionalProperties: false
+      description: This action is used to add an additional drive, or set of drives,
+        to a capacity source for the storage pool.
+      properties:
+        target:
+          description: Link to invoke action
+          format: uri-reference
+          type: string
+        title:
+          description: Friendly action name
+          type: string
+      type: object
+      x-longDescription: This action shall be used to add a drive, or set of drives,
+        to an underlying capacity source for the storage pool.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_AddDrivesRequestBody:
+      additionalProperties: false
+      description: This action is used to add an additional drive, or set of drives,
+        to a capacity source for the storage pool.
+      properties:
+        CapacitySource:
+          $ref: http://redfish.dmtf.org/schemas/swordfish/v1/Capacity.yaml#/components/schemas/Capacity_CapacitySource
+          description: The capacity source to be extended.
+          x-longDescription: This parameter shall contain the target capacity source
+            for the drive(s). This property does not need to be specified if the storage
+            pool only contains one capacity source, or if the implementation is capable
+            of automatically selecting the appropriate capacity source.
+        Drives:
+          description: The drive(s) to be added.
+          items:
+            $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          type: array
+          x-longDescription: This parameter shall contain the Uri to the existing
+            drive or drives to be added to a capacity source of the storage pool.
+            The implementation may impose restrictions on the number of drives added
+            simultaneously.
+      required:
+      - Drives
+      type: object
+      x-longDescription: This action shall be used to add a drive, or set of drives,
+        to an underlying capacity source for the storage pool.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_Links:
+      additionalProperties: false
+      description: The links object contains the links to other resources that are
+        related to this resource.
+      properties:
+        DedicatedSpareDrives:
+          description: An array of references to the drives which are dedicated spares
+            for this StoragePool.
+          items:
+            $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          readOnly: true
+          type: array
+          x-longDescription: The value of this property shall be a reference to the
+            resources that this StoragePool is associated with and shall reference
+            resources of type Drive. This property shall only contain references to
+            Drive entities which are currently assigned as a dedicated spare and are
+            able to support this StoragePool.
+          x-versionAdded: v1_2_0
+        DedicatedSpareDrives@odata.count:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_count
+        DefaultClassOfService:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          deprecated: true
+          description: The default class of service for entities allocated from this
+            storage pool.
+          readOnly: false
+          x-deprecatedReason: Default ClassOfService moved from Links to NavigationProperty.
+          x-longDescription: If present, this property shall reference the default
+            class of service for entities allocated from this storage pool.  If the
+            ClassesOfService collection is not empty, then the value of this property
+            shall be one of its entries. If not present, the default class of service
+            of the containing StorageService entity shall be used.
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties contained in this object shall conform to the Redfish
+            Specification-described requirements.
+        SpareResourceSets:
+          description: An array of references to SpareResourceSets.
+          items:
+            $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          readOnly: false
+          type: array
+          x-longDescription: Each referenced SpareResourceSet shall contain resources
+            that may be utilized to replace the capacity provided by a failed resource
+            having a compatible type.
+          x-versionAdded: v1_2_0
+        SpareResourceSets@odata.count:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_count
+      type: object
+      x-longDescription: The Links property, as described by the Redfish Specification,
+        shall contain references to resources that are related to, but not contained
+        by (subordinate to), this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_OemActions:
+      additionalProperties: true
+      description: The available OEM specific actions for this resource.
+      properties: {}
+      type: object
+      x-longDescription: This type shall contain any additional OEM actions for this
+        resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_RemoveDrives:
+      additionalProperties: false
+      description: This action is used to remove drive(s) from the capacity source
+        for the StoragePool.
+      properties:
+        target:
+          description: Link to invoke action
+          format: uri-reference
+          type: string
+        title:
+          description: Friendly action name
+          type: string
+      type: object
+      x-longDescription: This action shall be used to remove a drive from the StoragePool.
+        This action is targeted at a graceful drive removal process, such as initiating
+        a drive cleanup and data reallocation before drive removal from the pool.
+        The implementation may impose restrictions on the number of drives removed
+        simultaneously.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_RemoveDrivesRequestBody:
+      additionalProperties: false
+      description: This action is used to remove drive(s) from the capacity source
+        for the StoragePool.
+      properties:
+        Drives:
+          description: The drive(s) to be removed.
+          items:
+            $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          type: array
+          x-longDescription: This parameter shall contain the Uri to the drive or
+            drives to be removed from the underlying capacity source.
+      required:
+      - Drives
+      type: object
+      x-longDescription: This action shall be used to remove a drive from the StoragePool.
+        This action is targeted at a graceful drive removal process, such as initiating
+        a drive cleanup and data reallocation before drive removal from the pool.
+        The implementation may impose restrictions on the number of drives removed
+        simultaneously.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_SetCompressionState:
+      additionalProperties: false
+      description: This action is used to set the compression state of the pool.
+      properties:
+        target:
+          description: Link to invoke action
+          format: uri-reference
+          type: string
+        title:
+          description: Friendly action name
+          type: string
+      type: object
+      x-longDescription: This action shall be used to set the compression state of
+        the storage pool. This may be both a highly impactful, as well as a long running
+        operation.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_SetCompressionStateRequestBody:
+      additionalProperties: false
+      description: This action is used to set the compression state of the pool.
+      properties:
+        Enable:
+          description: This property indicates the desired compression state of the
+            storage pool.
+          type: boolean
+          x-longDescription: This property shall indicate the desired compression
+            state of the storage pool.
+      required:
+      - Enable
+      type: object
+      x-longDescription: This action shall be used to set the compression state of
+        the storage pool. This may be both a highly impactful, as well as a long running
+        operation.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_SetDeduplicationState:
+      additionalProperties: false
+      description: This action is used to set the dedupe state of the pool.
+      properties:
+        target:
+          description: Link to invoke action
+          format: uri-reference
+          type: string
+        title:
+          description: Friendly action name
+          type: string
+      type: object
+      x-longDescription: This action shall be used to set the dedupe state of the
+        storage pool. This may be both a highly impactful, as well as a long running
+        operation.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_SetDeduplicationStateRequestBody:
+      additionalProperties: false
+      description: This action is used to set the dedupe state of the pool.
+      properties:
+        Enable:
+          description: This property indicates the desired deduplication state of
+            the storage pool.
+          type: boolean
+          x-longDescription: This property shall indicate the desired deduplication
+            state of the storage pool.
+      required:
+      - Enable
+      type: object
+      x-longDescription: This action shall be used to set the dedupe state of the
+        storage pool. This may be both a highly impactful, as well as a long running
+        operation.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_SetEncryptionState:
+      additionalProperties: false
+      description: This action is used to set the encryption state of the pool.
+      properties:
+        target:
+          description: Link to invoke action
+          format: uri-reference
+          type: string
+        title:
+          description: Friendly action name
+          type: string
+      type: object
+      x-longDescription: This action shall be used to set the encryption state of
+        the storage pool. This may be both a highly impactful, as well as a long running
+        operation.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_SetEncryptionStateRequestBody:
+      additionalProperties: false
+      description: This action is used to set the encryption state of the pool.
+      properties:
+        Enable:
+          description: This property indicates the desired encryption state of the
+            storage pool.
+          type: boolean
+          x-longDescription: This property shall indicate the desired encryption state
+            of the storage pool.
+      required:
+      - Enable
+      type: object
+      x-longDescription: This action shall be used to set the encryption state of
+        the storage pool. This may be both a highly impactful, as well as a long running
+        operation.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePool_v1_3_3_StoragePool:
+      additionalProperties: false
+      description: A container of data storage.
+      properties:
+        '@odata.context':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_context
+        '@odata.etag':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_etag
+        '@odata.id':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_id
+        '@odata.type':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_type
+        Actions:
+          $ref: '#/components/schemas/StoragePool_v1_3_3_Actions'
+          description: The available actions for this resource.
+          x-longDescription: The Actions property shall contain the available actions
+            for this resource.
+          x-versionAdded: v1_3_0
+        AllocatedPools:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: A reference to the collection of storage pools allocated from
+            this storage pool.
+          readOnly: true
+          x-longDescription: The value of this property shall contain a reference
+            to the collection of storage pools allocated from this storage pool.
+        AllocatedVolumes:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: A reference to the collection of volumes allocated from this
+            storage pool.
+          readOnly: true
+          x-longDescription: The value of this property shall contain a reference
+            to the collection of volumes allocated from this storage pool.
+        BlockSizeBytes:
+          deprecated: true
+          description: Maximum Block size in bytes.
+          format: int64
+          minimum: 0
+          nullable: true
+          readOnly: true
+          type: integer
+          x-deprecatedReason: This property has been Deprecated in favor of StoragePool.v1_1_1.StoragePool.MaxBlockSizeBytes
+          x-longDescription: Maximum size in bytes of the blocks which form this Volume.
+            If the block size is variable, then the maximum block size in bytes should
+            be specified. If the block size is unknown or if a block concept is not
+            valid (for example, with Memory), enter a 1.
+          x-units: By
+        Capacity:
+          $ref: http://redfish.dmtf.org/schemas/swordfish/v1/Capacity.yaml#/components/schemas/Capacity_Capacity
+          description: Capacity utilization.
+          x-longDescription: The value of this property shall provide an information
+            about the actual utilization of the capacity within this storage pool.
+        CapacitySources:
+          description: An array of space allocations to this store.
+          items:
+            $ref: http://redfish.dmtf.org/schemas/swordfish/v1/Capacity.yaml#/components/schemas/Capacity_CapacitySource
+          readOnly: false
+          type: array
+          x-autoExpand: true
+          x-longDescription: Fully or partially consumed storage from a source resource.
+            Each entry shall provide capacity allocation data from a named source
+            resource.
+        CapacitySources@odata.count:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_count
+        ClassesOfService:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: The ClassesOfService supported by this storage pool.
+          readOnly: false
+          x-longDescription: This property shall contain references to all classes
+            of service supported by this storage pool. Capacity allocated from this
+            storage pool shall conform to one of the referenced classes of service.
+        Compressed:
+          description: Indicator of whether or not the StoragePool has compression
+            enabled.
+          nullable: true
+          readOnly: false
+          type: boolean
+          x-longDescription: This property shall contain a boolean indicator if the
+            StoragePool is currently utilizing compression or not.
+          x-versionAdded: v1_3_0
+        Deduplicated:
+          description: Indicator of whether or not the StoragePool has deduplication
+            enabled.
+          nullable: true
+          readOnly: false
+          type: boolean
+          x-longDescription: This property shall contain a boolean indicator if the
+            StoragePool is currently utilizing deduplication or not.
+          x-versionAdded: v1_3_0
+        DefaultClassOfService:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: The default class of service for entities allocated from this
+            storage pool.
+          readOnly: false
+          x-longDescription: If present, this property shall reference the default
+            class of service for entities allocated from this storage pool.  If the
+            ClassesOfService collection is not empty, then the value of this property
+            shall be one of its entries. If not present, the default class of service
+            of the containing StorageService entity shall be used.
+          x-versionAdded: v1_2_0
+        Description:
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Description
+          - enum:
+            - null
+          readOnly: true
+        Encrypted:
+          description: Indicator of whether or not the StoragePool has encryption
+            enabled.
+          nullable: true
+          readOnly: false
+          type: boolean
+          x-longDescription: This property shall contain a boolean indicator if the
+            StoragePool is currently utilizing encryption or not.
+          x-versionAdded: v1_3_0
+        IOStatistics:
+          $ref: http://redfish.dmtf.org/schemas/swordfish/v1/IOStatistics.yaml#/components/schemas/IOStatistics_IOStatistics
+          description: Statistics for this StoragePool.
+          x-longDescription: The value shall represent IO statistics for this StoragePool.
+          x-versionAdded: v1_2_0
+        Id:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Id
+          readOnly: true
+        Identifier:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Identifier
+          description: The value identifies this resource.
+          x-longDescription: The value identifies this resource. The value shall be
+            unique within the managed ecosystem.
+        Links:
+          $ref: '#/components/schemas/StoragePool_v1_3_3_Links'
+          description: The links object contains the links to other resources that
+            are related to this resource.
+          x-longDescription: The Links property, as described by the Redfish Specification,
+            shall contain references to resources that are related to, but not contained
+            by (subordinate to), this resource.
+        LowSpaceWarningThresholdPercents:
+          description: Low space warning threshold specified in percents.
+          items:
+            format: int64
+            nullable: true
+            type: integer
+          maximum: 100
+          minimum: 0
+          readOnly: false
+          type: array
+          x-longDescription: 'Each time the following value is less than one of the
+            values in the array the LOW_SPACE_THRESHOLD_WARNING event shall be triggered:
+            Across all CapacitySources entries, percent = (SUM(AllocatedBytes) - SUM(ConsumedBytes))/SUM(AllocatedBytes).'
+          x-units: '%'
+        MaxBlockSizeBytes:
+          description: Maximum Block size in bytes.
+          format: int64
+          minimum: 0
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: If present, the value is the maximum block size of an
+            allocated resource. If the block size is unknown or if a block concept
+            is not valid (for example, with Memory), this property shall be NULL.
+          x-units: By
+          x-versionAdded: v1_1_1
+        Name:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Name
+          readOnly: true
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties that this object contains shall conform to the Redfish
+            Specification-described requirements.
+        RecoverableCapacitySourceCount:
+          description: Current number of capacity source resources that are available
+            as replacements.
+          format: int64
+          nullable: true
+          readOnly: false
+          type: integer
+          x-longDescription: The value is the number of available capacity source
+            resources currently available in the event that an equivalent capacity
+            source resource fails.
+          x-versionAdded: v1_2_0
+        RemainingCapacityPercent:
+          description: The percentage of the capacity remaining in the StoragePool.
+          format: int64
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: If present, this value shall return  {[(SUM(AllocatedBytes)
+            - SUM(ConsumedBytes)]/SUM(AllocatedBytes)}*100 represented as an integer
+            value.
+          x-versionAdded: v1_1_0
+        Status:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Status
+          description: The property contains the status of the StoragePool.
+          x-longDescription: The property shall contain the status of the StoragePool.
+        SupportedProvisioningPolicies:
+          description: This collection specifies all supported storage allocation
+            properties for the Storage Pool.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataStorageLoSCapabilities.yaml#/components/schemas/DataStorageLoSCapabilities_ProvisioningPolicy
+            - enum:
+              - null
+          readOnly: false
+          type: array
+          x-longDescription: This collection shall specify all supported storage allocation
+            policies for the Storage Pool.
+          x-versionAdded: v1_3_0
+        SupportedRAIDTypes:
+          description: A collection of the RAID Types supported by the storage pool.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/Volume.yaml#/components/schemas/Volume_RAIDType
+            - enum:
+              - null
+          readOnly: true
+          type: array
+          x-longDescription: This collection shall contain all the RAIDType values
+            supported by the storage pool.
+          x-versionAdded: v1_3_0
+      required:
+      - '@odata.id'
+      - '@odata.type'
+      - Id
+      - Name
+      type: object
+      x-longDescription: A container of data storage capable of providing capacity
+        conforming to one of its supported classes of service. The storage pool does
+        not support IO to its data storage.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+title: '#StoragePool.v1_3_3.StoragePool'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA
+x-release: 1.1.0

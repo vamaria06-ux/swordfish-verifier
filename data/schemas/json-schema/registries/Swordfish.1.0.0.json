@@ -1,0 +1,55 @@
+{
+    "@Redfish.Copyright": "Copyright 2017 Storage Networking Industry Association (SNIA), USA. All rights reserved. For the full SNIA copyright policy, see http://www.snia.org/about/corporate_info/copyright",
+    "@odata.type": "#MessageRegistry.v1_0_0.MessageRegistry",
+    "Id": "Swordfish.1.0.0",
+    "Name": "Swordfish Message Registry",
+    "Language": "en",
+    "Description": "This registry defines the event messages for Swordfish",
+    "RegistryPrefix": "Swordfish",
+    "RegistryVersion": "1.0.0",
+    "OwningEntity": "SNIA",
+    "Messages": {
+        "LowSpaceWarningThresholdTriggered": {
+            "Description": "Indicates that a LowSpaceWarningThreshold has been triggered.",
+            "Message": "The LowSpaceWarningThreshold %1 has been triggered on %2. See ExtendedInfo for more information.",
+            "Severity": "Warning",
+            "NumberOfArgs": 2,
+            "ParamTypes": [
+                "number",
+                "string"
+            ],
+            "Resolution": "See ExtendedInfo for more information."
+        },
+        "LowSpaceWarningThresholdCleared": {
+            "Description": "Indicates that a LowSpaceWarningThreshold has been cleared.",
+            "Message": "The LowSpaceWarningThreshold %1 has been cleared on %2.",
+            "Severity": "OK",
+            "NumberOfArgs": 2,
+            "ParamTypes": [
+                "number",
+                "string"
+            ],
+            "Resolution": "None."
+        },
+        "SearchFailed": {
+            "Description": "Indicates that a search failed.",
+            "Message": "Object %1 not found that matched requested parameters.",
+            "Severity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "Resolution": "Retry search with different parameters."
+        },
+        "NoDefaultValue": {
+            "Description": "Indicates that no default value was set.",
+            "Message": "No default value has been set for property %1.",
+            "Severity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "Resolution": "Assign a default value for the property."
+        }
+    }
+}

@@ -1,0 +1,286 @@
+components:
+  schemas:
+    FileShare_v1_3_0_Actions:
+      additionalProperties: false
+      description: The available actions for this resource.
+      properties:
+        Oem:
+          $ref: '#/components/schemas/FileShare_v1_3_0_OemActions'
+          description: This property contains the available OEM specific actions for
+            this resource.
+          x-longDescription: This property shall contain any additional OEM actions
+            for this resource.
+          x-versionAdded: v1_1_0
+      type: object
+      x-longDescription: This type shall contain the available actions for this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    FileShare_v1_3_0_FileShare:
+      additionalProperties: false
+      description: An instance of a shared set of files with a common directory structure.
+      properties:
+        '@odata.context':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_context
+        '@odata.etag':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_etag
+        '@odata.id':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_id
+        '@odata.type':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_type
+        Actions:
+          $ref: '#/components/schemas/FileShare_v1_3_0_Actions'
+          description: The available actions for this resource.
+          x-longDescription: The Actions property shall contain the available actions
+            for this resource.
+          x-versionAdded: v1_1_0
+        CASupported:
+          description: Continuous Availability is supported. Client/Server mediated
+            recovery from network and server failure with application transparency.
+          nullable: true
+          readOnly: false
+          type: boolean
+          x-longDescription: The value of this property shall indicate that Continuous
+            Availability is supported. Client/Server mediated recovery from network
+            and server failure with application transparency. This property shall
+            be NULL unless the FileSharingProtocols property includes SMB.  The default
+            value for this property is false.
+        DefaultAccessCapabilities:
+          description: An array of default access capabilities for the file share.
+            The types of default access can include Read, Write, and/or Execute.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataStorageLoSCapabilities.yaml#/components/schemas/DataStorageLoSCapabilities_StorageAccessCapability
+            - enum:
+              - null
+          readOnly: true
+          type: array
+          x-longDescription: The value of this property shall be an array containing
+            entries for the default access capabilities for the file share. Each entry
+            shall specify a default access privilege. The types of default access
+            can include Read, Write, and/or Execute.
+        Description:
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Description
+          - enum:
+            - null
+          readOnly: true
+        EthernetInterfaces:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: A link to the collection of Ethernet interfaces that provide
+            access to this file share.
+          readOnly: true
+          x-longDescription: The value shall be a link to an EthernetInterfaceCollection
+            with members that provide access to the file share.
+        ExecuteSupport:
+          description: Execute access is supported by the file share.
+          nullable: true
+          readOnly: true
+          type: boolean
+          x-longDescription: The value of this property shall indicate whether Execute
+            access is supported by the file share. The default value for this property
+            is false.
+        FileSharePath:
+          description: A path to an exported file or directory on the file system
+            where this file share is hosted.
+          nullable: true
+          readOnly: true
+          type: string
+          x-longDescription: The value of this property shall be a path (relative
+            to the file system root) to the exported file or directory on the file
+            system where this file share is hosted.
+        FileShareQuotaType:
+          description: Specifies the type of quota enforcement.
+          oneOf:
+          - $ref: '#/components/schemas/FileShare_v1_3_0_QuotaType'
+          - enum:
+            - null
+          readOnly: false
+          x-longDescription: If FileShareQuotaType is present, a value of Soft shall
+            specify that quotas are not enforced, and a value of Hard shall specify
+            that writes shall fail if the space consumed would exceed the value of
+            the FileShareTotalQuotaBytes property.
+        FileShareRemainingQuotaBytes:
+          description: The number of remaining bytes that may be used by this file
+            share.
+          format: int64
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: If present, the value of this property shall indicate
+            the remaining number of bytes that may be consumed by this file share.
+          x-units: By
+        FileShareTotalQuotaBytes:
+          description: The maximum number of bytes that may be used by this file share.
+          format: int64
+          nullable: true
+          readOnly: false
+          type: integer
+          x-longDescription: If present, the value of this property shall indicate
+            the maximum number of bytes that may be consumed by this file share.
+          x-units: By
+        FileSharingProtocols:
+          description: An array of file sharing protocols supported by this file share.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/FileSystem.yaml#/components/schemas/FileSystem_FileProtocol
+            - enum:
+              - null
+          readOnly: true
+          type: array
+          x-longDescription: This property shall be an array containing entries for
+            the file sharing protocols supported by this file share. Each entry shall
+            specify a file sharing protocol supported by the file system.
+        Id:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Id
+          readOnly: true
+        Links:
+          $ref: '#/components/schemas/FileShare_v1_3_0_Links'
+          description: The links object contains the links to other resources that
+            are related to this resource.
+          x-longDescription: The Links property, as described by the Redfish Specification,
+            shall contain references to resources that are related to, but not contained
+            by (subordinate to), this resource.
+        LowSpaceWarningThresholdPercents:
+          description: An array of low space warning threshold percentages for the
+            file share.
+          items:
+            format: int64
+            nullable: true
+            type: integer
+          maximum: 100
+          minimum: 0
+          readOnly: false
+          type: array
+          x-longDescription: 'This property shall be an array containing entries for
+            the percentages of file share capacity at which low space warning events
+            are be issued. A LOW_SPACE_THRESHOLD_WARNING event shall be triggered
+            each time the remaining file share capacity value becomes less than one
+            of the values in the array. The following shall be true: Across all CapacitySources
+            entries, percent = (SUM(AllocatedBytes) - SUM(ConsumedBytes))/SUM(AllocatedBytes).'
+          x-units: '%'
+        Name:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Name
+          readOnly: true
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties that this object contains shall conform to the Redfish
+            Specification-described requirements.
+        RemainingCapacityPercent:
+          description: The percentage of the capacity remaining in the FileShare.
+          format: int64
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: If present, this value shall return  {[(SUM(AllocatedBytes)
+            - SUM(ConsumedBytes)]/SUM(AllocatedBytes)}*100 represented as an integer
+            value.
+          x-versionAdded: v1_1_0
+        ReplicationEnabled:
+          description: Indicates whether or not replication is enabled on the file
+            share.
+          nullable: true
+          readOnly: false
+          type: boolean
+          x-longDescription: The property shall indicate whether or not replication
+            is enabled on the file share. This property shall be consistent with the
+            state reflected at the storage pool level.
+          x-versionAdded: v1_3_0
+        RootAccess:
+          description: Root access is allowed by the file share.
+          nullable: true
+          readOnly: true
+          type: boolean
+          x-longDescription: The value of this property shall indicate whether Root
+            access is allowed by the file share. The default value for this property
+            is false.
+        Status:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Status
+          description: Indicates the status of the file share.
+          x-longDescription: This value of this property shall indicate the status
+            of the file share.
+        WritePolicy:
+          description: Defines how writes are replicated to the shared source.
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StorageReplicaInfo.yaml#/components/schemas/StorageReplicaInfo_ReplicaUpdateMode
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The value of this property shall define how writes are
+            replicated to the shared source.
+      required:
+      - '@odata.id'
+      - '@odata.type'
+      - Id
+      - Name
+      type: object
+      x-longDescription: This resource shall be used to represent a shared set of
+        files with a common directory structure.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    FileShare_v1_3_0_Links:
+      additionalProperties: false
+      description: The links object contains the links to other resources that are
+        related to this resource.
+      properties:
+        ClassOfService:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: A link to the ClassOfService for this file share.
+          x-longDescription: This value shall be a link to the ClassOfService for
+            this file share.
+        FileSystem:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: A link to the file system containing the file share.
+          readOnly: true
+          x-longDescription: The value shall be a link to the file system containing
+            the file share.
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties contained in this object shall conform to the Redfish
+            Specification-described requirements.
+      type: object
+      x-longDescription: The Links property, as described by the Redfish Specification,
+        shall contain references to resources that are related to, but not contained
+        by (subordinate to), this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    FileShare_v1_3_0_OemActions:
+      additionalProperties: true
+      description: The available OEM specific actions for this resource.
+      properties: {}
+      type: object
+      x-longDescription: This type shall contain any additional OEM actions for this
+        resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    FileShare_v1_3_0_QuotaType:
+      description: Indicates whether quotas are enabled and enforced by this file
+        share. A value of Soft means that quotas are enabled but not enforced, and
+        a value of Hard means that quotas are enabled and enforced.
+      enum:
+      - Soft
+      - Hard
+      type: string
+      x-enumDescriptions:
+        Hard: Quotas are enabled and enforced.
+        Soft: Quotas are enabled but not enforced.
+      x-enumLongDescriptions:
+        Hard: This value shall indicate that quotas are enabled and enforced.
+        Soft: This value shall indicate that quotas are enabled but not enforced.
+      x-longDescription: The value shall indicate whether quotas are enabled and enforced
+        by this file share. If QuotaType is present, a value of Soft shall mean that
+        quotas are enabled but not enforced, and a value of Hard shall mean that quotas
+        are enabled and enforced.
+title: '#FileShare.v1_3_0.FileShare'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA
+x-release: 1.2.5

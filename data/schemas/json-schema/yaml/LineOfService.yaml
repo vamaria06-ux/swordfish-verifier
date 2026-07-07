@@ -1,0 +1,12 @@
+components:
+  schemas:
+    LineOfService_LineOfService:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/LineOfService.v1_1_0.yaml#/components/schemas/LineOfService_v1_1_0_LineOfService
+      description: Describes a service option.
+      x-longDescription: This service option is the abstract base class for other
+        ClassOfService and concrete lines of service.
+title: '#LineOfService.LineOfService'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

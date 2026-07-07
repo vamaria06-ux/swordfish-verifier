@@ -1,0 +1,12 @@
+components:
+  schemas:
+    ClassOfService_ClassOfService:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/ClassOfService.v1_2_0.yaml#/components/schemas/ClassOfService_v1_2_0_ClassOfService
+      description: A service option composed of one or more other service options.
+      x-longDescription: A service option composed of one or more other service options.  ITIL
+        defines a service option as a choice of utility or warranty for a service.
+title: '#ClassOfService.ClassOfService'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

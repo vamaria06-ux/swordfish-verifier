@@ -1,0 +1,122 @@
+components:
+  schemas:
+    SpareResourceSet_v1_0_0_Links:
+      additionalProperties: false
+      description: The links object contains the links to other resources that are
+        related to this resource.
+      properties:
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties contained in this object shall conform to the Redfish
+            Specification-described requirements.
+        OnHandSpares:
+          description: The type of resources in the set.
+          items:
+            $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          type: array
+          x-longDescription: The type of resources in the set.
+        OnHandSpares@odata.count:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_count
+        ReplacementSpareSets:
+          description: Other spare sets that can be utilized to replenish this spare
+            set.
+          items:
+            $ref: '#/components/schemas/SpareResourceSet_v1_0_0_SpareResourceSet'
+          type: array
+          x-longDescription: Other spare sets that can be utilized to replenish this
+            spare set.
+        ReplacementSpareSets@odata.count:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_count
+      type: object
+      x-longDescription: The Links property, as described by the Redfish Specification,
+        shall contain references to resources that are related to, but not contained
+        by (subordinate to), this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    SpareResourceSet_v1_0_0_SpareResourceSet:
+      additionalProperties: false
+      description: A description of a set of spare resources.
+      properties:
+        '@odata.context':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_context
+        '@odata.etag':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_etag
+        '@odata.id':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_id
+        '@odata.type':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_type
+        Description:
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Description
+          - enum:
+            - null
+          readOnly: true
+        Id:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Id
+          readOnly: true
+        Links:
+          $ref: '#/components/schemas/SpareResourceSet_v1_0_0_Links'
+          description: Contains links to other resources that are related to this
+            resource.
+          x-longDescription: This structure shall contain references to resources
+            that are not contained within this resource.
+        Name:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Name
+          readOnly: true
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties that this object contains shall conform to the Redfish
+            Specification-described requirements.
+        OnHandLocation:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.v1_5_0.yaml#/components/schemas/Resource_v1_5_0_Location
+          description: Location where this set of spares is kept.
+          x-longDescription: The location where this set of spares is kept.
+        OnLine:
+          description: This set is available online.
+          nullable: true
+          readOnly: false
+          type: boolean
+          x-longDescription: This set shall be available online.
+        ResourceType:
+          description: The type of resources in the set.
+          nullable: true
+          readOnly: false
+          type: string
+          x-longDescription: The type of resources in the set.
+        TimeToProvision:
+          description: Amount of time needed to make an on-hand resource available
+            as a spare.
+          nullable: true
+          pattern: ^P(\d+D)?(T(\d+H)?(\d+M)?(\d+(.\d+)?S)?)?$
+          readOnly: false
+          type: string
+          x-longDescription: Amount of time needed to make an on-hand resource available
+            as a spare.
+        TimeToReplenish:
+          description: Amount of time needed to get more on-hand resources.
+          nullable: true
+          pattern: ^P(\d+D)?(T(\d+H)?(\d+M)?(\d+(.\d+)?S)?)?$
+          readOnly: false
+          type: string
+          x-longDescription: Amount of time needed to replenish consumed on-hand resources.
+      required:
+      - '@odata.id'
+      - '@odata.type'
+      - Id
+      - Name
+      type: object
+      x-longDescription: The values define a set of spares of a particular type.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+title: '#SpareResourceSet.v1_0_0.SpareResourceSet'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA
+x-release: 1.0.7a

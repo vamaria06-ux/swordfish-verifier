@@ -1,0 +1,79 @@
+{
+    "@Redfish.Copyright": "Copyright 2019-2022 SNIA. All rights reserved.",
+    "@odata.type": "#FeaturesRegistry.v1_0_1.FeaturesRegistry",
+    "Id": "SwordfishFeatures.1.0.1",
+    "Name": "Swordfish Features Registry",
+    "Language": "en",
+    "Description": "This registry defines the Swordfish features.",
+    "RegistryPrefix": "SwordfishFeatures",
+    "RegistryVersion": "1.0.1",
+    "OwningEntity": "SNIA",
+    "Features": [
+        {
+            "FeatureName": "SNIA.Swordfish.Discovery",
+            "Description": "Supports discovery of resources in a service-based Swordfish system.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishDiscovery.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.EventNotification",
+            "Description": "Supports the Swordfish Event Notification Feature defined in SwordfishEventNotification.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishEventNotification.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.IOPerformance",
+            "Description": "Supports the Swordfish Block IOPerformance Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishIOPerformance.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.Provisioning",
+            "Description": "Supports the Block Provisioning Feature in a service-based Swordfish system.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishBlockProvisioning.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.LocalReplication",
+            "Description": "Supports the local replication for block storage Feature in a service-based Swordfish system.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishBlockLocalReplication.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.RemoteReplication",
+            "Description": "Supports the remote replication for block storage Feature in a service-based Swordfish system.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishBlockRemoteReplication.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.MappingMasking",
+            "Description": "Supports the Swordfish Block Mapping and Masking Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishBlockMappingMasking.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.CapacityManagement",
+            "Description": "Supports the Swordfish Block Capacity Management Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishBlockCapacityManagement.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.File.Provisioning",
+            "Description": "Supports the File Provisioning Feature in a service-based Swordfish system.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishFileProvisioning.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.File.CapacityManagement",
+            "Description": "Supports the Swordfish File Capacity Management Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishFileCapacityManagement.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.EnergyStar",
+            "Description": "Supports the Swordfish EnergyStar for Storage Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishEnergyStar.json"
+        }
+    ]
+}

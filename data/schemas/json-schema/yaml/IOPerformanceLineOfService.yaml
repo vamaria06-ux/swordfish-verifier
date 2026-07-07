@@ -1,0 +1,12 @@
+components:
+  schemas:
+    IOPerformanceLineOfService_IOPerformanceLineOfService:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/IOPerformanceLineOfService.v1_1_1.yaml#/components/schemas/IOPerformanceLineOfService_v1_1_1_IOPerformanceLineOfService
+      description: Describe service option within the IO performance line of service.
+      x-longDescription: This structure may be used to define a service option related
+        to IO performance.
+title: '#IOPerformanceLineOfService.IOPerformanceLineOfService'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

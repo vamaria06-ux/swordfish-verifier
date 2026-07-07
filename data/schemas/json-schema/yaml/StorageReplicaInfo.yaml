@@ -1,0 +1,83 @@
+components:
+  schemas:
+    StorageReplicaInfo_ReplicaFaultDomain:
+      description: Values of ReplicaFaultDomain describe the fault domain for the
+        replication relationship.
+      enum:
+      - Local
+      - Remote
+      type: string
+      x-enumDescriptions:
+        Local: Local indicates that the source and target replicas are contained within
+          a single fault domain.
+        Remote: Remote indicates that the source and target replicas are in separate
+          fault domains.
+      x-enumLongDescriptions:
+        Local: This enumeration literal shall indicate that the source and target
+          replicas are contained within a single fault domain.
+        Remote: This enumeration literal shall indicate that the source and target
+          replicas are in separate fault domains.
+      x-longDescription: The enumeration literals may be used to specify the fault
+        domain for the replication relationship.
+    StorageReplicaInfo_ReplicaInfo:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StorageReplicaInfo.v1_4_0.yaml#/components/schemas/StorageReplicaInfo_v1_4_0_ReplicaInfo
+      description: Defines the characteristics of a replica of a source.
+      x-longDescription: The value shall define the characteristics of a replica of
+        a source.
+    StorageReplicaInfo_ReplicaType:
+      description: Values of ReplicaType describe the intended outcome of the replication.
+      enum:
+      - Mirror
+      - Snapshot
+      - Clone
+      - TokenizedClone
+      type: string
+      x-enumDescriptions:
+        Clone: Create a point in time, full copy the source.
+        Mirror: Create and maintain a copy of the source.
+        Snapshot: Create a point in time, virtual copy of the source.
+        TokenizedClone: Create a token based clone.
+      x-enumLongDescriptions:
+        Clone: This enumeration literal shall indicate that replication shall create
+          a point in time, full copy the source.
+        Mirror: This enumeration literal shall indicate that replication shall create
+          and maintain a copy of the source.
+        Snapshot: This enumeration literal shall indicate that replication shall create
+          a point in time, virtual copy of the source.
+        TokenizedClone: This enumeration literal shall indicate that replication shall
+          create a token based clone.
+      x-longDescription: The enumeration literals may be used to specify the intended
+        outcome of the replication.
+    StorageReplicaInfo_ReplicaUpdateMode:
+      description: Values of ReplicaUpdateMode describe whether the target elements
+        will be updated synchronously or asynchronously.
+      enum:
+      - Active
+      - Synchronous
+      - Asynchronous
+      - Adaptive
+      type: string
+      x-enumDescriptions:
+        Active: Active-Active (i.e. bidirectional) synchronous updates.
+        Adaptive: Allows implementation to switch between synchronous and asynchronous
+          modes.
+        Asynchronous: Asynchronous updates.
+        Synchronous: Synchronous updates.
+      x-enumLongDescriptions:
+        Active: This enumeration literal shall indicate Active-Active (i.e. bidirectional)
+          synchronous updates.
+        Adaptive: This enumeration literal shall indicate that an implementation may
+          switch between synchronous and asynchronous modes.
+        Asynchronous: This enumeration literal shall indicate Asynchronous updates.
+        Synchronous: This enumeration literal shall indicate Synchronous updates.
+      x-longDescription: The enumeration literals may be used to specify whether the
+        target elements will be updated synchronously or asynchronously.
+    StorageReplicaInfo_StorageReplicaInfo:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StorageReplicaInfo.v1_4_0.yaml#/components/schemas/StorageReplicaInfo_v1_4_0_StorageReplicaInfo
+      description: Defines the characteristics of a Storage Replica.
+      x-longDescription: This entity shall define the characteristics of a replica.
+title: '#StorageReplicaInfo.StorageReplicaInfo'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

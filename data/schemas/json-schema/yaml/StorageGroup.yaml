@@ -1,0 +1,55 @@
+components:
+  schemas:
+    StorageGroup_AccessCapability:
+      enum:
+      - Read
+      - ReadWrite
+      type: string
+      x-enumDescriptions:
+        Read: Endpoints are allowed to perform reads from the specified resource.
+        ReadWrite: Endpoints are allowed to perform reads from and writes to the specified
+          resource.
+    StorageGroup_MappedVolume:
+      additionalProperties: false
+      description: Relate a SCSI Logical Unit Number to a Volume.
+      properties:
+        AccessCapability:
+          description: Supported IO access capability.
+          oneOf:
+          - $ref: '#/components/schemas/StorageGroup_AccessCapability'
+          - enum:
+            - null
+          readOnly: false
+          x-longDescription: Each entry shall specify the storage access capability
+            for this mapped volume.
+          x-versionAdded: v1_4_0
+        LogicalUnitNumber:
+          description: A SCSI Logical Unit Number for a Volume.
+          nullable: true
+          readOnly: false
+          type: string
+          x-longDescription: If present, the value is a SCSI Logical Unit Number for
+            the Volume.
+        Volume:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: A mapped Volume.
+          readOnly: false
+          x-longDescription: The value shall reference a mapped Volume.
+      type: object
+      x-longDescription: Relate a SCSI Logical Unit Number to a Volume.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StorageGroup_StorageGroup:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StorageGroup.v1_6_0.yaml#/components/schemas/StorageGroup_v1_6_0_StorageGroup
+      description: Collection of resources that are managed and exposed to hosts as
+        a group.
+      x-longDescription: 'Collection of resources that the system can make available
+        to one or more host systems. The collection can contain: block, file, or object
+        storage; local system access points through which the collection is made available;
+        hosts, or host access points to which the collection is made available.'
+title: '#StorageGroup.StorageGroup'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

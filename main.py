@@ -49,6 +49,7 @@ def get_system_urls(client):
     except Exception:
         return []
 
+
 def select_resources(rules):
     """
     Даёт пользователю выбрать какие ресурсы проверять.
@@ -148,42 +149,20 @@ def _print_result(r):
 def main():
     sep()
     print("  SWORDFISH API VERIFIER v1.0")
-    print("  Спецификация: Swordfish v1.2.9")
+    print("  Спецификация: Swordfish v1.2.9 (JSON-схемы)")
     sep()
 
-    # 1. Версия спецификации
-    choice = menu("Выберите версию спецификации:", [
-        "Swordfish v1.2.9 (рекомендуется)",
-        "Swordfish v1.2.8",
-        "Swordfish v1.2.7"
-    ])
-    versions = {1: "1.2.9", 2: "1.2.8", 3: "1.2.7"}
-    spec_version = versions[choice]
-    print(f"  Выбрана версия: Swordfish v{spec_version}")
+    # ---------- Запрос пути к JSON-схемам ----------
+    print("\n  Укажите путь к папке с JSON-схемами SNIA")
+    print("  (или нажмите Enter, чтобы использовать встроенные правила):")
+    spec_path = input("  > ").strip()
+    if not spec_path:
+        spec_path = None
+        print("  Использую встроенные правила")
+    else:
+        print(f"  Буду читать схемы из: {spec_path}")
 
-    # 2. Формат спецификации 
-    fmt_choice = menu("Выберите формат спецификации:", [
-        "JSON схемы (рекомендуется)",
-        "YAML",
-        "XML",
-        "Встроенные правила (без файлов)"
-    ])
-    formats = {1: "JSON", 2: "YAML", 3: "XML", 4: "Встроенные"}
-    spec_format = formats[fmt_choice]
-    print(f"  Выбран формат: {spec_format}")
-
-    spec_path = None
-    if fmt_choice in (1, 2, 3):
-        print(f"\n  Укажите путь к папке с JSON схемами SNIA")
-        print(f"  (или Enter чтобы использовать встроенные правила):")
-        entered_path = input("  > ").strip()
-        if entered_path:
-            spec_path = entered_path
-            print(f"  Буду читать схемы из: {spec_path}")
-        else:
-            print("  Использую встроенные правила")
-
-    #  3. Подключение к эмулятору 
+    # ---------- Подключение к эмулятору ----------
     config = load_config("config.yml")
     print(f"\n  Подключение к: {config.emulator_url}")
     client = HttpClient(config)
@@ -194,12 +173,12 @@ def main():
         sys.exit(1)
     print("  Сервер доступен ✓")
 
-    #  4. Загрузка правил 
+    # ---------- Загрузка правил ----------
     parser = Parser()
     rules = parser.load_rules(spec_path=spec_path)
     print(f"  Загружено ресурсов: {len(rules)}")
 
-    # 5. Выбор ресурсов 
+    # ---------- Выбор ресурсов ----------
     resource_choice = menu("Что проверять?", [
         "Все ресурсы (рекомендуется)",
         "Только базовые (ServiceRoot, Systems, StorageSystems)",
@@ -214,11 +193,11 @@ def main():
 
     print(f"\n  Будет проверено ресурсов: {len(rules)}")
 
-    # 6. Запуск проверок
+    # ---------- Запуск проверок ----------
     validator = Validator()
     all_results = run_checks(client, validator, rules)
 
-    # 7. Отчёт
+    # ---------- Отчёт ----------
     reporter = Reporter()
     report = reporter.generate(all_results, config)
 

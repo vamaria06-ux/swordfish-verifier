@@ -1,0 +1,12 @@
+components:
+  schemas:
+    FileSystemMetrics_FileSystemMetrics:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/FileSystemMetrics.v1_1_0.yaml#/components/schemas/FileSystemMetrics_v1_1_0_FileSystemMetrics
+      description: The usage and health statistics for a file system.
+      x-longDescription: The FileSystemMetrics schema shall contain the usage and
+        health statistics for a file system in a Redfish implementation.
+title: '#FileSystemMetrics.FileSystemMetrics'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

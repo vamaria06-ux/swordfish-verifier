@@ -1,0 +1,142 @@
+components:
+  schemas:
+    StoragePoolMetrics_v1_0_0_Actions:
+      additionalProperties: false
+      description: The available actions for this resource.
+      properties:
+        Oem:
+          $ref: '#/components/schemas/StoragePoolMetrics_v1_0_0_OemActions'
+          description: The available OEM-specific actions for this resource.
+          x-longDescription: This property shall contain the available OEM-specific
+            actions for this resource.
+      type: object
+      x-longDescription: This type shall contain the available actions for this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePoolMetrics_v1_0_0_OemActions:
+      additionalProperties: true
+      description: The available OEM-specific actions for this resource.
+      properties: {}
+      type: object
+      x-longDescription: This type shall contain the available OEM-specific actions
+        for this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StoragePoolMetrics_v1_0_0_StoragePoolMetrics:
+      additionalProperties: false
+      description: The usage and health statistics for a storage pool.
+      properties:
+        '@odata.context':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_context
+        '@odata.etag':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_etag
+        '@odata.id':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_id
+        '@odata.type':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_type
+        Actions:
+          $ref: '#/components/schemas/StoragePoolMetrics_v1_0_0_Actions'
+          description: The available actions for this resource.
+          x-longDescription: This property shall contain the available actions for
+            this resource.
+        ConsistencyCheckErrorCount:
+          description: The number of consistency check errors of the volume.
+          nullable: true
+          readOnly: true
+          type: number
+          x-longDescription: This property shall contain the number of consistency
+            check errors over the lifetime of the storage pool.
+        CorrectableIOReadErrorCount:
+          description: The number of the correctable read errors for the lifetime
+            of the storage pool.
+          format: int64
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: This property shall contain the number of the correctable
+            read errors for the lifetime of the storage pool.
+        CorrectableIOWriteErrorCount:
+          description: The number of the correctable write errors for the lifetime
+            of the storage pool.
+          format: int64
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: This property shall contain the number of the correctable
+            write errors for the lifetime of the storage pool.
+        Description:
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Description
+          - enum:
+            - null
+          readOnly: true
+        IOStatistics:
+          $ref: http://redfish.dmtf.org/schemas/swordfish/v1/IOStatistics.yaml#/components/schemas/IOStatistics_IOStatistics
+          description: Statistics for this storage pool.
+          x-longDescription: The value shall represent IO statistics for this storage
+            pool.
+        Id:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Id
+          readOnly: true
+        Name:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Name
+          readOnly: true
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties that this object contains shall conform to the Redfish
+            Specification-described requirements.
+        RebuildErrorCount:
+          description: The number of rebuild errors over the lifetime of the storage
+            pool.
+          nullable: true
+          readOnly: true
+          type: number
+          x-longDescription: This property shall contain the number of rebuild errors
+            over the lifetime of the storage pool.
+        StateChangeCount:
+          description: The number of state changes (changes in Status.State) for this
+            storage pool.
+          nullable: true
+          readOnly: true
+          type: number
+          x-longDescription: This property shall contain the number of state changes
+            (changes in Status.State) for this storage pool.
+        UncorrectableIOReadErrorCount:
+          description: The number of the uncorrectable read errors for the lifetime
+            of the storage pool.
+          format: int64
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: This property shall contain the number of the uncorrectable
+            read errors for the lifetime of the storage pool.
+        UncorrectableIOWriteErrorCount:
+          description: The number of the uncorrectable write errors for the lifetime
+            of the storage pool.
+          format: int64
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: This property shall contain the number of the uncorrectable
+            write errors for the lifetime of the storage pool.
+      required:
+      - '@odata.id'
+      - '@odata.type'
+      - Id
+      - Name
+      type: object
+      x-longDescription: The StoragePoolMetrics schema shall contain the usage and
+        health statistics for a storage pool in a Redfish implementation.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+title: '#StoragePoolMetrics.v1_0_0.StoragePoolMetrics'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA
+x-release: 1.2.6

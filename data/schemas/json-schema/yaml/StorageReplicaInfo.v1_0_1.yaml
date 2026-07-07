@@ -1,0 +1,678 @@
+components:
+  schemas:
+    StorageReplicaInfo_v1_0_1_ConsistencyState:
+      description: The values of ConsistencyState indicate the consistency type used
+        by the source and its associated target group.
+      enum:
+      - Consistent
+      - Inconsistent
+      type: string
+      x-enumDescriptions:
+        Consistent: Consistent.
+        Inconsistent: Not consistent.
+      x-enumLongDescriptions:
+        Consistent: This enumeration literal shall indicate that the source and target
+          shall be consistent.
+        Inconsistent: This enumeration literal shall indicate that the source and
+          target are not required to be consistent.
+      x-longDescription: ConsistencyState enumeration literals may be used to describe
+        the consistency type used by the source and its associated target group.
+    StorageReplicaInfo_v1_0_1_ConsistencyStatus:
+      description: The values of ConsistencyStatus indicate the current status of
+        consistency. Consistency may have been disabled or might be experiencing an
+        error condition.
+      enum:
+      - Consistent
+      - InProgress
+      - Disabled
+      - InError
+      type: string
+      x-enumDescriptions:
+        Consistent: Consistent.
+        Disabled: Consistency disabled.
+        InError: Consistency error.
+        InProgress: Becoming consistent.
+      x-enumLongDescriptions:
+        Consistent: This enumeration literal shall indicate that the source and target
+          are consistent.
+        Disabled: This enumeration literal shall indicate that the source and target
+          have consistency disabled.
+        InError: This enumeration literal shall indicate that the source and target
+          are not consistent.
+        InProgress: This enumeration literal shall indicate that the source and target
+          are becoming consistent.
+      x-longDescription: ConsistencyStatus enumeration literals may be used to indicate
+        the current status of consistency. Consistency may have been disabled or may
+        be experiencing an error condition.
+    StorageReplicaInfo_v1_0_1_ConsistencyType:
+      description: The values of ConsistencyType indicates the consistency type used
+        by the source and its associated target group.
+      enum:
+      - SequentiallyConsistent
+      type: string
+      x-enumDescriptions:
+        SequentiallyConsistent: Sequentially consistent.
+      x-enumLongDescriptions:
+        SequentiallyConsistent: This enumeration literal shall indicate that the source
+          and target shall be sequentially consistent.
+      x-longDescription: ConsistencyType enumeration literals indicate the consistency
+        type used by the source and its associated target group.
+    StorageReplicaInfo_v1_0_1_ReplicaInfo:
+      additionalProperties: false
+      description: Defines the characteristics of a replica.
+      properties:
+        ConsistencyEnabled:
+          description: True if consistency is enabled.
+          nullable: true
+          readOnly: true
+          type: boolean
+          x-longDescription: If true, consistency shall be enabled across the source
+            and its associated target replica(s). The default value for this property
+            is false.
+        ConsistencyState:
+          description: The current state of consistency.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ConsistencyState'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The ConsistencyState enumeration literal shall indicate
+            the current state of consistency.
+        ConsistencyStatus:
+          description: The current status of consistency.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ConsistencyStatus'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The ConsistencyStatus enumeration literal shall specify
+            the current status of consistency. Consistency may have been disabled
+            or is experiencing an error condition.
+        ConsistencyType:
+          description: Indicates the consistency type used by the source and its associated
+            target group.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ConsistencyType'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The ConsistencyType enumeration literal shall indicate
+            the consistency type used by the source and its associated target group.
+        FailedCopyStopsHostIO:
+          description: If true, the storage array tells host to stop sending data
+            to source element if copying to a remote element fails.
+          nullable: true
+          readOnly: true
+          type: boolean
+          x-longDescription: If true, the storage array shall stop receiving data
+            to the source element if copying to a remote element fails. The default
+            value for this property is false.
+        PercentSynced:
+          description: Specifies the percent of the work completed to reach synchronization.
+          format: int64
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: Specifies the percent of the work completed to reach
+            synchronization. Shall not be instantiated if implementation is not capable
+            of providing this information.  If related to a group, then PercentSynced
+            shall be an average of the PercentSynced across all members of the group.
+          x-units: '%'
+        Replica:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: Deprecated - Use Source Replica. The resource that is the source
+            of this replica.
+          readOnly: true
+          x-longDescription: Deprecated - Use Source Replica. The value shall reference
+            the resource that is the source of this replica.
+        ReplicaPriority:
+          description: The priority of background copy engine I/O to be managed relative
+            to host I/O operations during a sequential background copy operation.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ReplicaPriority'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The enumeration literal shall specify the priority of
+            background copy engine I/O to be managed relative to host I/O operations
+            during a sequential background copy operation.
+        ReplicaProgressStatus:
+          description: The status of the session with respect to Replication activity.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ReplicaProgressStatus'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The ReplicaProgressStatus enumeration literal shall specify
+            the status of the session with respect to Replication activity.
+        ReplicaReadOnlyAccess:
+          description: This property specifies whether the source, the target, or
+            both elements are read only to the host.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ReplicaReadOnlyAccess'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The enumeration literal shall specify whether the source,
+            the target, or both elements are read only to the host.
+        ReplicaRecoveryMode:
+          description: Describes whether the copy operation continues after a broken
+            link is restored.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ReplicaRecoveryMode'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The enumeration literal shall specify whether the copy
+            operation continues after a broken link is restored.
+        ReplicaRole:
+          deprecated: true
+          description: The source or target role of this replica.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ReplicaRole'
+          - enum:
+            - null
+          readOnly: true
+          x-deprecatedReason: ReplicaInfo is only used within a replica target. The
+            Replica property here addresses the source resource.  A TargetReplicas
+            property in each source resource describes the replica targets of a source.
+          x-longDescription: The ReplicaRole enumeration literal shall represent the
+            source or target role of this replica as known to the containing resource.
+        ReplicaSkewBytes:
+          description: Applies to Adaptive mode and it describes maximum number of
+            bytes the SyncedElement (target) can be out of sync.
+          format: int64
+          nullable: true
+          readOnly: true
+          type: integer
+          x-longDescription: Applies to Adaptive mode and it describes maximum number
+            of bytes the SyncedElement (target) can be out of sync. If the number
+            of out-of-sync bytes exceeds the skew value, ReplicaUpdateMode shall be
+            switched to synchronous.
+          x-units: By
+        ReplicaState:
+          description: ReplicaState describes the state of the relationship with respect
+            to Replication activity.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ReplicaState'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The ReplicaState enumeration literal shall specify the
+            state of the relationship with respect to Replication activity.
+        ReplicaType:
+          description: ReplicaType describes the intended outcome of the replication.
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StorageReplicaInfo.yaml#/components/schemas/StorageReplicaInfo_ReplicaType
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The ReplicaType enumeration literal shall describe the
+            intended outcome of the replication.
+        ReplicaUpdateMode:
+          description: Describes whether the target elements will be updated synchronously
+            or asynchronously.
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StorageReplicaInfo.yaml#/components/schemas/StorageReplicaInfo_ReplicaUpdateMode
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The enumeration literal shall specify whether the target
+            elements will be updated synchronously or asynchronously.
+        RequestedReplicaState:
+          description: The last requested or desired state for the relationship.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_ReplicaState'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The last requested or desired state for the relationship.
+            The actual state of the relationship shall be represented by ReplicaState.
+            When RequestedState reaches the requested state, this property shall be
+            null.
+        SyncMaintained:
+          description: Synchronization is maintained.
+          nullable: true
+          readOnly: true
+          type: boolean
+          x-longDescription: If true, Synchronization shall be maintained. The default
+            value for this property is false.
+        UndiscoveredElement:
+          description: This property specifies whether the source, the target, or
+            both elements involved in a copy operation are undiscovered.
+          oneOf:
+          - $ref: '#/components/schemas/StorageReplicaInfo_v1_0_1_UndiscoveredElement'
+          - enum:
+            - null
+          readOnly: true
+          x-longDescription: The enumeration literal shall specify whether the source,
+            the target, or both elements involved in a copy operation are undiscovered.
+            An element is considered undiscovered if its object model is not known
+            to the service performing the copy operation.
+        WhenActivated:
+          description: Specifies when point-in-time copy was taken or when the replication
+            relationship is activated, reactivated, resumed or re-established.
+          nullable: true
+          readOnly: true
+          type: string
+          x-longDescription: The value shall be an ISO 8601 conformant time of day
+            that specifies when the point-in-time copy was taken or when the replication
+            relationship is activated, reactivated, resumed or re-established. This
+            property shall be null if the implementation is not capable of providing
+            this information.
+          x-units: '%'
+        WhenDeactivated:
+          description: Specifies when the replication relationship is deactivated.
+          nullable: true
+          readOnly: true
+          type: string
+          x-longDescription: The value shall be an ISO 8601 conformant time of day
+            that specifies when the replication relationship is deactivated. Do not
+            instantiate this property if implementation is not capable of providing
+            this information.
+          x-units: '%'
+        WhenEstablished:
+          description: Specifies when the replication relationship is established.
+          nullable: true
+          readOnly: true
+          type: string
+          x-longDescription: The value shall be an ISO 8601 conformant time of day
+            that specifies when the replication relationship is established. Do not
+            instantiate this property if implementation is not capable of providing
+            this information.
+          x-units: '%'
+        WhenSuspended:
+          description: Specifies when the replication relationship is suspended.
+          nullable: true
+          readOnly: true
+          type: string
+          x-longDescription: The value shall be an ISO 8601 conformant time of day
+            that specifies when the replication relationship is suspended. Do not
+            instantiate this property if implementation is not capable of providing
+            this information.
+          x-units: '%'
+        WhenSynced:
+          description: The point in time that the Elements were synchronized.
+          nullable: true
+          readOnly: true
+          type: string
+          x-longDescription: The value shall be an ISO 8601 conformant time of day
+            that specifies when the elements were synchronized.
+        WhenSynchronized:
+          description: Specifies when the replication relationship is synchronized.
+          nullable: true
+          readOnly: true
+          type: string
+          x-longDescription: The value shall be an ISO 8601 conformant time of day
+            that specifies when the replication relationship is synchronized. Do not
+            instantiate this property if implementation is not capable of providing
+            this information.
+          x-units: '%'
+      type: object
+      x-longDescription: The value shall define the characteristics of a replica.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StorageReplicaInfo_v1_0_1_ReplicaPriority:
+      description: ReplicaPriority allows the priority of background copy engine I/O
+        to be managed relative to host I/O operations during a sequential background
+        copy operation.
+      enum:
+      - Low
+      - Same
+      - High
+      - Urgent
+      type: string
+      x-enumDescriptions:
+        High: Copy engine I/O has higher priority than host I/O.
+        Low: Copy engine I/O lower priority than host I/O.
+        Same: Copy engine I/O has the same priority as host I/O.
+        Urgent: Copy operation to be performed as soon as possible, regardless of
+          the host I/O requests.
+      x-enumLongDescriptions:
+        High: Copy engine I/O shall have a higher priority than host I/O.
+        Low: Copy engine I/O shall have a lower priority than host I/O.
+        Same: Copy engine I/O shall have the same priority as host I/O.
+        Urgent: Regardless of the host I/O requests, the Copy operation shall be performed
+          as soon as possible.
+      x-longDescription: The enumeration literals of the ReplicaPriority enumeration
+        may be used to specify the priority of background copy engine I/O relative
+        to host I/O operations during a sequential background copy operation.
+    StorageReplicaInfo_v1_0_1_ReplicaProgressStatus:
+      description: Values of ReplicaProgressStatus describe the status of the session
+        with respect to Replication activity.
+      enum:
+      - Completed
+      - Dormant
+      - Initializing
+      - Preparing
+      - Synchronizing
+      - Resyncing
+      - Restoring
+      - Fracturing
+      - Splitting
+      - FailingOver
+      - FailingBack
+      - Detaching
+      - Aborting
+      - Mixed
+      - Suspending
+      - RequiresFracture
+      - RequiresResync
+      - RequiresActivate
+      - Pending
+      - RequiresDetach
+      - Terminating
+      - RequiresSplit
+      - RequiresResume
+      type: string
+      x-enumDescriptions:
+        Aborting: Abort in progress.
+        Completed: The request is completed. Data flow is idle.
+        Detaching: Detach in progress.
+        Dormant: Indicates that the data flow is inactive, suspended or quiesced.
+        FailingBack: Undoing the result of failover.
+        FailingOver: In the process of switching source and target.
+        Fracturing: Fracture in progress.
+        Initializing: In the process of establishing source/replica relationship and
+          the data flow has not started.
+        Mixed: Applies to groups with element pairs with different statuses. Generally,
+          the individual statuses need to be examined.
+        Pending: The flow of data has stopped momentarily due to limited bandwidth
+          or a busy system.
+        Preparing: Preparation in progress.
+        RequiresActivate: The requested operation has completed, however, the synchronization
+          relationship needs to be activated before further copy operations can be
+          issued.
+        RequiresDetach: The requested operation has completed, however, the synchronization
+          relationship needs to be detached before further copy operations can be
+          issued.
+        RequiresFracture: The requested operation has completed, however, the synchronization
+          relationship needs to be fractured before further copy operations can be
+          issued.
+        RequiresResume: The requested operation has completed, however, the synchronization
+          relationship needs to be resumed before further copy operations can be issued.
+        RequiresResync: The requested operation has completed, however, the synchronization
+          relationship needs to be resynced before further copy operations can be
+          issued.
+        RequiresSplit: The requested operation has completed, however, the synchronization
+          relationship needs to be split before further copy operations can be issued.
+        Restoring: Restore in progress.
+        Resyncing: Resync in progress.
+        Splitting: Split in progress.
+        Suspending: The copy operation is in the process of being suspended.
+        Synchronizing: Sync in progress.
+        Terminating: The relationship is in the process of terminating.
+      x-enumLongDescriptions:
+        Aborting: This enumeration literal shall indicate that replication has an
+          abort in progress.
+        Completed: This enumeration literal shall indicate that the request is completed.
+          Data flow is idle.
+        Detaching: This enumeration literal shall indicate that replication has a
+          detach in progress.
+        Dormant: This enumeration literal shall indicate that the data flow is inactive,
+          suspended or quiesced.
+        FailingBack: This enumeration literal shall indicate that replication is undoing
+          the result of failover.
+        FailingOver: This enumeration literal shall indicate that replication is in
+          the process of switching source and target.
+        Fracturing: This enumeration literal shall indicate that replication has a
+          fracture in progress.
+        Initializing: This enumeration literal shall indicate that replication is
+          in the process of establishing source/replica relationship and the data
+          flow has not started.
+        Mixed: This enumeration literal shall indicate that replication status is
+          mixed across element pairs in a replication group. Generally, the individual
+          statuses need to be examined.
+        Pending: This enumeration literal shall indicate that the flow of data has
+          stopped momentarily due to limited bandwidth or a busy system.
+        Preparing: This enumeration literal shall indicate that replication has preparation
+          in progress.
+        RequiresActivate: This enumeration literal shall indicate that the requested
+          operation has completed, however, the synchronization relationship needs
+          to be activated before further copy operations can be issued.
+        RequiresDetach: This enumeration literal shall indicate that the requested
+          operation has completed, however, the synchronization relationship needs
+          to be detached before further copy operations can be issued.
+        RequiresFracture: This enumeration literal shall indicate that the requested
+          operation has completed, however, the synchronization relationship needs
+          to be fractured before further copy operations can be issued.
+        RequiresResume: This enumeration literal shall indicate that the requested
+          operation has completed, however, the synchronization relationship needs
+          to be resumed before further copy operations can be issued.
+        RequiresResync: This enumeration literal shall indicate that the requested
+          operation has completed, however, the synchronization relationship needs
+          to be resynced before further copy operations can be issued.
+        RequiresSplit: This enumeration literal shall indicate that the requested
+          operation has completed, however, the synchronization relationship needs
+          to be split before further copy operations can be issued.
+        Restoring: This enumeration literal shall indicate that replication has a
+          restore in progress.
+        Resyncing: This enumeration literal shall indicate that replication has resynchronization
+          in progress.
+        Splitting: This enumeration literal shall indicate that replication has a
+          split in progress.
+        Suspending: This enumeration literal shall indicate that replication has a
+          copy operation in the process of being suspended.
+        Synchronizing: This enumeration literal shall indicate that replication has
+          synchronization in progress.
+        Terminating: This enumeration literal shall indicate that the replication
+          relationship is in the process of terminating.
+      x-longDescription: ReplicaProgressStatus enumeration literals may be used to
+        describe the status of the session with respect to Replication activity.
+    StorageReplicaInfo_v1_0_1_ReplicaReadOnlyAccess:
+      description: Values of ReplicaReadOnlyAccess specify whether the source, the
+        target, or both elements are read only to the host.
+      enum:
+      - SourceElement
+      - ReplicaElement
+      - Both
+      type: string
+      x-enumDescriptions:
+        Both: Both the source and the target elements are read only to the host.
+        ReplicaElement: The replica element.
+        SourceElement: The source element.
+      x-enumLongDescriptions:
+        Both: Both the source and the target elements shall be read only to the host.
+        ReplicaElement: The replica element shall be read-only to the host.
+        SourceElement: The source element shall be read-only to the host.
+      x-longDescription: The enumeration literals may be used to specify whether the
+        source, the target, or both elements are read-only to the host.
+    StorageReplicaInfo_v1_0_1_ReplicaRecoveryMode:
+      description: Values of ReplicaRecoveryMode describe whether the copy operation
+        continues after a broken link is restored.
+      enum:
+      - Automatic
+      - Manual
+      type: string
+      x-enumDescriptions:
+        Automatic: Copy operation resumes automatically.
+        Manual: ReplicaState is set to Suspended after the link is restored. It is
+          required to issue the Resume operation to continue.
+      x-enumLongDescriptions:
+        Automatic: The copy operation shall resume automatically.
+        Manual: The ReplicaState shall be set to Suspended after the link is restored.
+          It is required to issue the Resume operation to continue.
+      x-longDescription: The enumeration literals may be used to specify whether the
+        copy operation continues after a broken link is restored.
+    StorageReplicaInfo_v1_0_1_ReplicaRole:
+      deprecated: true
+      description: Values of ReplicaRole specify whether the resource is a source
+        of replication or the target of replication.
+      enum:
+      - Source
+      - Target
+      type: string
+      x-deprecatedReason: ReplicaRole is not used.
+      x-enumDescriptions:
+        Source: The source element.
+        Target: The target element.
+      x-enumLongDescriptions:
+        Source: This enumeration literal shall indicate a source element.
+        Target: This enumeration literal shall indicate target element.
+      x-longDescription: The enumeration literals may be used to specify whether the
+        resource is a source of replication or the target of replication.
+    StorageReplicaInfo_v1_0_1_ReplicaState:
+      description: Values of ReplicaState describe the state of the relationship with
+        respect to Replication activity.
+      enum:
+      - Initialized
+      - Unsynchronized
+      - Synchronized
+      - Broken
+      - Fractured
+      - Split
+      - Inactive
+      - Suspended
+      - Failedover
+      - Prepared
+      - Aborted
+      - Skewed
+      - Mixed
+      - Partitioned
+      - Invalid
+      - Restored
+      type: string
+      x-enumDescriptions:
+        Aborted: The copy operation is aborted with the Abort operation. Use the Resync
+          Replica operation to restart the copy operation.
+        Broken: The relationship is non-functional due to errors in the source, the
+          target, the path between the two or space constraints.
+        Failedover: Reads and writes are sent to the target element. Source element
+          is not reachable.
+        Fractured: Target is split from the source.
+        Inactive: Data flow has stopped, writes to source element will not be sent
+          to target element.
+        Initialized: ' The link to enable replication is established and source/replica
+          elements are associated, but the data flow has not started.'
+        Invalid: The array is unable to determine the state of the replication relationship,
+          for example, after the connection is restored; however, either source or
+          target elements have an unknown status.
+        Mixed: Applies to the ReplicaState of GroupSynchronized. It indicates the
+          StorageSynchronized relationships of the elements in the groups have different
+          ReplicaState values.
+        Partitioned: State of replication relationship can not be determined, for
+          example, due to a connection problem.
+        Prepared: Initialization is completed, however, the data flow has not started.
+        Restored: It indicates the source element was restored from the target element.
+        Skewed: The target has been modified and is no longer synchronized with the
+          source element or the point-in-time view.
+        Split: The target element was gracefully (or systematically) split from its
+          source element -- consistency is guaranteed.
+        Suspended: Data flow between the source and target elements has stopped. Writes
+          to source element are held until the relationship is Resumed.
+        Synchronized: For the Mirror, Snapshot, or Clone replication, the target represents
+          a copy of the source.
+        Unsynchronized: Not all the source element data has been copied to the target
+          element.
+      x-enumLongDescriptions:
+        Aborted: This enumeration literal shall indicate that the copy operation is
+          aborted with the Abort operation. The Resync Replica operation can be used
+          to restart the copy operation.
+        Broken: ' This enumeration literal shall indicate that the relationship is
+          non-functional due to errors in the source, the target, the path between
+          the two or space constraints.'
+        Failedover: This enumeration literal shall indicate that the reads and writes
+          are sent to the target element. The source element may not be reachable.
+        Fractured: This enumeration literal shall indicate that the Target is split
+          from the source. The target may not be consistent.
+        Inactive: This enumeration literal shall indicate that data flow has stopped,
+          writes to source element shall not be sent to target element.
+        Initialized: This enumeration literal shall indicate that the link to enable
+          replication is established and source/replica elements are associated, but
+          the data flow has not started.
+        Invalid: This enumeration literal shall indicate that the storage server is
+          unable to determine the state of the replication relationship, for example,
+          after the connection is restored; however, either source or target elements
+          have an unknown status.
+        Mixed: This enumeration literal shall indicate the ReplicaState of GroupSynchronized.
+          The value indicates the StorageSynchronized relationships of the elements
+          in the group have different ReplicaState values.
+        Partitioned: This enumeration literal shall indicate that the state of replication
+          relationship can not be determined, for example, due to a connection problem.
+        Prepared: This enumeration literal shall indicate that initialization is completed,
+          however, the data flow has not started.
+        Restored: This enumeration literal shall indicate that the source element
+          was restored from the target element.
+        Skewed: This enumeration literal shall indicate that the target has been modified
+          and is no longer synchronized with the source element or the point-in-time
+          view.
+        Split: This enumeration literal shall indicate that the target element was
+          gracefully (or systematically) split from its source element -- consistency
+          shall be guaranteed.
+        Suspended: This enumeration literal shall indicate that the data flow between
+          the source and target elements has stopped. Writes to source element shall
+          be held until the relationship is Resumed.
+        Synchronized: This enumeration literal shall indicate that for Mirror, Snapshot,
+          or Clone replication, the target represents a copy of the source.
+        Unsynchronized: This enumeration literal shall indicate that not all the source
+          element data has been copied to the target element.
+      x-longDescription: ReplicaState enumeration literals may be used to describe
+        the state of the relationship with respect to Replication activity.
+    StorageReplicaInfo_v1_0_1_StorageReplicaInfo:
+      additionalProperties: false
+      description: Defines the characteristics of a Storage Replica.
+      properties:
+        '@odata.context':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_context
+        '@odata.etag':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_etag
+        '@odata.id':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_id
+        '@odata.type':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_type
+        Description:
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Description
+          - enum:
+            - null
+          readOnly: true
+        Id:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Id
+          readOnly: true
+        Name:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Name
+          readOnly: true
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties that this object contains shall conform to the Redfish
+            Specification-described requirements.
+      required:
+      - '@odata.id'
+      - '@odata.type'
+      - Id
+      - Name
+      type: object
+      x-longDescription: This entity shall define the characteristics of a replica.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StorageReplicaInfo_v1_0_1_UndiscoveredElement:
+      description: Values of UndiscoveredElement specify whether the source, the target,
+        or both elements involved in a copy operation are undiscovered. An element
+        is considered undiscovered if its object model is not known to the service
+        performing the copy operation.
+      enum:
+      - SourceElement
+      - ReplicaElement
+      type: string
+      x-enumDescriptions:
+        ReplicaElement: The replica element is undiscovered.
+        SourceElement: The source element is undiscovered.
+      x-enumLongDescriptions:
+        ReplicaElement: This enumeration literal shall indicate that the replica element
+          is undiscovered.
+        SourceElement: This enumeration literal shall indicate that the source element
+          is undiscovered.
+      x-longDescription: The enumeration literals may be used to specify whether the
+        source, the target, or both elements involved in a copy operation are undiscovered.
+        An element shall be considered undiscovered if its object model is not known
+        to the service performing the copy operation.
+title: '#StorageReplicaInfo.v1_0_1.StorageReplicaInfo'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA
+x-release: 1.0.3

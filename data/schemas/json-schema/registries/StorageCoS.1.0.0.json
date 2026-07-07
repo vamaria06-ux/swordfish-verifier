@@ -1,0 +1,64 @@
+{
+    "@Redfish.Copyright": "Copyright 2017-2026 Storage Networking Industry Association (SNIA), USA. All rights reserved. For the full SNIA copyright policy, see http://www.snia.org/about/corporate_info/copyright",
+    "@odata.type": "#MessageRegistry.v1_2_0.MessageRegistry",
+    "Id": "StorageCoS.1.0.0",
+    "Name": "Swordfish Storage CoS Message Registry",
+    "Language": "en",
+    "Description": "This registry defines the event messages for Swordfish Storage Class of Service based implementations.",
+    "RegistryPrefix": "StorageCoS",
+    "RegistryVersion": "1.0.0",
+    "OwningEntity": "SNIA",
+    "Messages": {
+        "ClassOfServiceOutOfCompliance": {
+            "Description": "Indicates that the class of service is out of compliance.",
+            "LongDescription": "Indicates that the class of service is out of compliance.",
+            "Message": "The service level requirements of the `%1` class of service are out of compliance.",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The name of the `ClassOfService` that is out of compliance."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the name of the `ClassOfService`  that is out of compliance."
+            ],
+            "Resolution": "Resolution dependent upon class of service and resource type."
+        },
+        "LineOfServiceOutOfCompliance": {
+            "Description": "Indicates that the line of service is out of compliance.",
+            "LongDescription": "Indicates that the line of service is out of compliance.",
+            "Message": "The service level requirements of the `%1` line of service are out of compliance.",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The name of the `LineOfService` that is out of compliance."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the name of the `LineOfService` that is out of compliance."
+            ],
+            "Resolution": "Resolution dependent upon line of service and resource type."
+        },
+        "OutOfCompliance": {
+            "Description": "Indicates that the service level requirements are out of compliance.",
+            "LongDescription": "Indicates that the line of service is out of compliance.",
+            "Message": "The service level requirements of `%1` are out of compliance.",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The name of the `LineOfService` that has service level requirements out of compliance."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the name of the `LineOfService` that has service level requirements out of compliance."
+            ],
+            "Resolution": "Resolution dependent upon service level and resource type."
+        }
+    }
+}

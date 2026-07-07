@@ -1,0 +1,12 @@
+components:
+  schemas:
+    DataStorageLineOfService_DataStorageLineOfService:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataStorageLineOfService.v1_3_1.yaml#/components/schemas/DataStorageLineOfService_v1_3_1_DataStorageLineOfService
+      description: Describe data storage and provisioning capabilities.
+      x-longDescription: This resource shall be used to describe storage availability
+        and provisioning capabilities.
+title: '#DataStorageLineOfService.DataStorageLineOfService'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA
