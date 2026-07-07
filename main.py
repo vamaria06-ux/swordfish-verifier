@@ -124,14 +124,20 @@ def run_checks(client, validator, rules):
 
     for resource_name, rule in rules.items():
         if rule.get("dynamic"):
-            # нужен id системы — получаем список систем
+            # id системы нужен всем динамическим ресурсам -- получаем и
+            # кешируем его один раз, а не при каждом ресурсе
             if system_urls is None:
                 system_urls = get_system_urls(client)
-                if not system_urls:
-                    sep()
-                    print(f"  {resource_name} — пропущен")
-                    print("  Нет доступных StorageSystems для проверки")
-                    continue
+
+            if not system_urls:
+                # раньше это сообщение печаталось только для ПЕРВОГО
+                # динамического ресурса, а остальные (например,
+                # StoragePools/Volumes/Drives) молча пропадали из вывода,
+                # если система недоступна -- теперь сообщаем про каждый
+                sep()
+                print(f"  {resource_name} — пропущен")
+                print("  Нет доступных StorageSystems для проверки")
+                continue
 
             # проверяем для каждой системы
             for system_url in system_urls:
