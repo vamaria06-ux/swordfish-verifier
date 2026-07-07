@@ -1,0 +1,135 @@
+{
+    "@Redfish.Copyright": "Copyright 2017-2026 Storage Networking Industry Association (SNIA), USA. All rights reserved. For the full SNIA copyright policy, see http://www.snia.org/about/corporate_info/copyright",
+    "@odata.type": "#MessageRegistry.v1_2_0.MessageRegistry",
+    "Id": "Storage.1.0.0",
+    "Name": "Swordfish Storage Message Registry",
+    "Language": "en",
+    "Description": "This registry defines the event messages for Swordfish Storage devices.  This replaces the Swordfish message registry.",
+    "RegistryPrefix": "Storage",
+    "RegistryVersion": "1.0.0",
+    "OwningEntity": "SNIA",
+    "Messages": {
+        "LowSpaceWarningThresholdTriggered": {
+            "Description": "Indicates that a LowSpaceWarningThreshold has been triggered.",
+            "LongDescription": "Indicates that a LowSpaceWarningThreshold has been triggered. For some resource types, adding more capacity may resolve the low space warning. Other suggested resolutions may be provided as OEM data.",
+            "Message": "The LowSpaceWarningThreshold `%1` has been triggered on `%2`.",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 2,
+            "ParamTypes": [
+                "number",
+                "string"
+            ],
+            "ArgDescriptions": [
+                "Threshold",
+                "Resource"
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the threshold value that has been exceeded.",
+                "This argument shall contain the Resource reporting the threshold trigger."
+            ],
+            "Resolution": "Resolution dependent upon resource type."
+        },
+        "LowSpaceWarningThresholdCleared": {
+            "Description": "Indicates that a LowSpaceWarningThreshold has been cleared.",
+            "LongDescription": "Indicates that a LowSpaceWarningThreshold has been cleared.",
+            "Message": "The LowSpaceWarningThreshold `%1` has been cleared on `%2`.",
+            "MessageSeverity": "OK",
+            "NumberOfArgs": 2,
+            "ParamTypes": [
+                "number",
+                "string"
+            ],
+            "ArgDescriptions": [
+                "threshold",
+                "resource"
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the threshold value that has been cleared.",
+                "This argument shall contain the Resource reporting the threshold cleared."
+            ],
+            "Resolution": "None."
+        },
+        "ReservationsLostAcrossPowerCycle": {
+            "Description": "Indicates that persistent reservation key and holder information was lost during powercycle.",
+            "LongDescription": "Indicates that persistent reservation key and holder information was lost during powercycle.",
+            "Message": "Persistent reservation key and holder information was lost during powercycle.",
+            "MessageSeverity": "OK",
+            "NumberOfArgs": 0,
+            "Resolution": "Reservations must be reconfigured in-band."
+        },
+        "BackgroundOperationFailed": {
+            "Description": "Indicates that a background operation failed.",
+            "LongDescription": "Indicates that a background operation failed.",
+            "Message": "The background operation `%1` failed.",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The name of the background `Operation` that failed."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the name of the background task that failed, typically defined by the `Operation` property or `OperationType` enum."
+            ],
+            "Resolution": "Check device status."
+        },
+        "BackgroundOperationSuspended": {
+            "Description": "Indicates that a background operation has been suspended.",
+            "LongDescription": "Indicates that a background operation has been suspended.",
+            "Message": "The background operation `%1` has been suspended.",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The name of the background `Operation` that has been suspended."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the name of the background task that has been suspended, typically defined by the `Operation` property or `OperationType` enum."
+            ],
+            "Resolution": "Resume or terminate the task"
+        },
+        "BackgroundOperationResumed": {
+            "Description": "Indicates that a background operation has resumed.",
+            "LongDescription": "Indicates that a background operation has resumed.",
+            "Message": "The background operation `%1` has resumed.",
+            "MessageSeverity": "OK",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The name of the background `Operation` that has resumed."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the name of the background task that has resumed, typically defined by the `Operation` property or `OperationType` enum."
+            ],
+            "ClearingLogic": {
+                "ClearsIf": "SameOriginOfCondition",
+                "ClearsMessage": [
+                    "BackgroundOperationSuspended"
+                ]
+            },
+            "Resolution": "None"
+        },
+        "BackgroundOperationComplete": {
+            "Description": "Indicates that a background operation has completed.",
+            "LongDescription": "Indicates that a background operation has completed.",
+            "Message": "The background operation `%1` has completed.",
+            "MessageSeverity": "OK",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The name of the background `Operation` that has completed."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the name of the background task that has completed, typically defined by the `Operation` property or `OperationType` enum."
+            ],
+            "Resolution": "None"
+        }
+    }
+}

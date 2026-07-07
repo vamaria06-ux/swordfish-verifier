@@ -1,0 +1,64 @@
+{
+    "@Redfish.Copyright": "Copyright 2017-2026 Storage Networking Industry Association (SNIA), USA. All rights reserved. For the full SNIA copyright policy, see http://www.snia.org/about/corporate_info/copyright",
+    "@odata.type": "#MessageRegistry.v1_2_0.MessageRegistry",
+    "Id": "StorageConnection.1.0.0",
+    "Name": "Swordfish Message Registry for StorageConnections.",
+    "Language": "en",
+    "Description": "This registry defines the event messages for Swordfish Connection usage.",
+    "RegistryPrefix": "StorageConnection",
+    "RegistryVersion": "1.0.0",
+    "OwningEntity": "SNIA",
+    "Messages": {
+        "ConnectionMappingAdded": {
+            "Description": "Indicates that a new connection mapping (VolumeInfo entry) has been added to the Connection.",
+            "LongDescription": "Indicates that a new connection mapping (VolumeInfo entry) has been added to the Connection.",
+            "Message": "Connection mapping for Volume `%1` has been added.",
+            "MessageSeverity": "OK",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The ID of the Volume related to the Connection."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the ID of the Volume that has been added to the Connection."
+            ],
+            "Resolution": "None."
+        },
+        "ConnectionMappingRemoved": {
+            "Description": "Indicates that a connection mapping (VolumeInfo entry) has been removed from the Connection.",
+            "LongDescription": "Indicates that a connection mapping (VolumeInfo entry) has been removed from the Connection.",
+            "Message": "Connection mapping for Volume `%1` has been removed.",
+            "MessageSeverity": "OK",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The ID of the Volume related to the Connection."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the ID of the Volume that has been removed from the Connection."
+            ],
+            "Resolution": "None."
+        },
+        "ConnectionMappingModified": {
+            "Description": "Indicates that a connection mapping (VolumeInfo entry) has been modified on the Connection.",
+            "LongDescription": "Indicates that a connection mapping (VolumeInfo entry) has been modified on the Connection.",
+            "Message": "Connection mapping for Volume `%1` has been modified.",
+            "MessageSeverity": "OK",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "The ID of the Volume related to the Connection."
+            ],
+            "ArgLongDescriptions": [
+                "This argument shall contain the ID of the Volume that has been modified on the Connection."
+            ],
+            "Resolution": "None."
+        }
+    }
+}

@@ -1,0 +1,48 @@
+components:
+  schemas:
+    StoragePool_NVMePoolType:
+      enum:
+      - EnduranceGroup
+      - NVMSet
+      type: string
+      x-enumDescriptions:
+        EnduranceGroup: This pool is of type EnduranceGroup, used by NVMe devices.
+        NVMSet: This pool is of type NVMSet, used by NVMe devices.
+      x-enumLongDescriptions:
+        EnduranceGroup: This type shall be used to specify a pool of type EnduranceGroup,
+          used by NVMe devices.
+        NVMSet: This type shall be used to specify a pool of type NVMSet, used by
+          NVMe devices.
+      x-versionAdded: v1_6_0
+    StoragePool_PoolType:
+      enum:
+      - Block
+      - File
+      - Object
+      - Pool
+      type: string
+      x-enumDescriptions:
+        Block: This pool is of type block.
+        File: This pool is of type file.
+        Object: This pool is of type object.
+        Pool: This pool is of type pool, indicating a hierarchy.
+      x-enumLongDescriptions:
+        Block: This type shall be used to specify a pool of type block. This is used
+          when the pool serves block storage.
+        File: This type shall be used to specify a pool of type file. This setting
+          is used when the pool serves file storage.
+        Object: This type shall be used to specify a pool of type object.
+        Pool: This type shall be used to specify a pool of type pool. This setting
+          is used to indicate a 'pool of pools' hierarchy.
+      x-versionAdded: v1_6_0
+    StoragePool_StoragePool:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StoragePool.v1_9_2.yaml#/components/schemas/StoragePool_v1_9_2_StoragePool
+      description: A container of data storage.
+      x-longDescription: A container of data storage capable of providing capacity
+        conforming to one of its supported classes of service. The storage pool does
+        not support IO to its data storage.
+title: '#StoragePool.StoragePool'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

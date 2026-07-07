@@ -1,0 +1,12 @@
+components:
+  schemas:
+    StoragePoolMetrics_StoragePoolMetrics:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StoragePoolMetrics.v1_2_0.yaml#/components/schemas/StoragePoolMetrics_v1_2_0_StoragePoolMetrics
+      description: The usage and health statistics for a storage pool.
+      x-longDescription: The StoragePoolMetrics schema shall contain the usage and
+        health statistics for a storage pool in a Redfish implementation.
+title: '#StoragePoolMetrics.StoragePoolMetrics'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

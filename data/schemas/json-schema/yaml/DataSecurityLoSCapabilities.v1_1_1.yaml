@@ -1,0 +1,182 @@
+components:
+  schemas:
+    DataSecurityLoSCapabilities_v1_1_1_Actions:
+      additionalProperties: false
+      description: The available actions for this resource.
+      properties:
+        Oem:
+          $ref: '#/components/schemas/DataSecurityLoSCapabilities_v1_1_1_OemActions'
+          description: This property contains the available OEM specific actions for
+            this resource.
+          x-longDescription: This property shall contain any additional OEM actions
+            for this resource.
+          x-versionAdded: v1_1_0
+      type: object
+      x-longDescription: This type shall contain the available actions for this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    DataSecurityLoSCapabilities_v1_1_1_DataSecurityLoSCapabilities:
+      additionalProperties: false
+      description: Describe data security capabilities.
+      properties:
+        '@odata.context':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_context
+        '@odata.etag':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_etag
+        '@odata.id':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_id
+        '@odata.type':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_type
+        Actions:
+          $ref: '#/components/schemas/DataSecurityLoSCapabilities_v1_1_1_Actions'
+          description: The available actions for this resource.
+          x-longDescription: The Actions property shall contain the available actions
+            for this resource.
+          x-versionAdded: v1_1_0
+        Description:
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Description
+          - enum:
+            - null
+          readOnly: true
+        Id:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Id
+          readOnly: true
+        Identifier:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Identifier
+          description: The value identifies this resource.
+          x-longDescription: The value identifies this resource.  The value shall
+            be unique within the managed ecosystem.
+        Name:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Name
+          readOnly: true
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties that this object contains shall conform to the Redfish
+            Specification-described requirements.
+        SupportedAntivirusEngineProviders:
+          description: Supported AntiVirus providers.
+          items:
+            nullable: true
+            type: string
+          readOnly: false
+          type: array
+          x-longDescription: The entry values shall specify supported AntiVirus providers.
+        SupportedAntivirusScanPolicies:
+          description: Supported policies that trigger an AntiVirus scan.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataSecurityLoSCapabilities.yaml#/components/schemas/DataSecurityLoSCapabilities_AntiVirusScanTrigger
+            - enum:
+              - null
+          readOnly: false
+          type: array
+          x-longDescription: The enumeration literal shall specify supported policies
+            that trigger an AntiVirus scan.
+        SupportedChannelEncryptionStrengths:
+          description: Supported key sizes for transport channel encryption.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataSecurityLoSCapabilities.yaml#/components/schemas/DataSecurityLoSCapabilities_KeySize
+            - enum:
+              - null
+          readOnly: false
+          type: array
+          x-longDescription: The enumeration literal shall specify supported key sizes
+            in a symmetric encryption algorithm (AES) for transport channel encryption.
+        SupportedDataSanitizationPolicies:
+          description: Supported data sanitization policies.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataSecurityLoSCapabilities.yaml#/components/schemas/DataSecurityLoSCapabilities_DataSanitizationPolicy
+            - enum:
+              - null
+          readOnly: false
+          type: array
+          x-longDescription: The enumeration literal shall specify supported data
+            sanitization policies.
+        SupportedHostAuthenticationTypes:
+          description: Supported authentication types for hosts (servers) or initiator
+            endpoints.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataSecurityLoSCapabilities.yaml#/components/schemas/DataSecurityLoSCapabilities_AuthenticationType
+            - enum:
+              - null
+          readOnly: false
+          type: array
+          x-longDescription: The enumeration literal shall specify supported authentication
+            types for hosts (servers) or initiator endpoints.
+        SupportedLinesOfService:
+          description: Collection of known and supported DataSecurityLinesOfService.
+          items:
+            $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataSecurityLineOfService.yaml#/components/schemas/DataSecurityLineOfService_DataSecurityLineOfService
+          readOnly: false
+          type: array
+          x-autoExpand: true
+          x-longDescription: The collection shall contain supported DataSecurity service
+            options.
+        SupportedLinesOfService@odata.count:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_count
+        SupportedMediaEncryptionStrengths:
+          description: Supported key sizes for media encryption.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataSecurityLoSCapabilities.yaml#/components/schemas/DataSecurityLoSCapabilities_KeySize
+            - enum:
+              - null
+          readOnly: false
+          type: array
+          x-longDescription: The enumeration literal shall specify supported key sizes
+            in a symmetric encryption algorithm (AES) for media encryption.
+        SupportedSecureChannelProtocols:
+          description: Supported protocols that provide encrypted communication.
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataSecurityLoSCapabilities.yaml#/components/schemas/DataSecurityLoSCapabilities_SecureChannelProtocol
+            - enum:
+              - null
+          readOnly: false
+          type: array
+          x-longDescription: The enumeration literal shall specify supported protocols
+            that provide encrypted communication.
+        SupportedUserAuthenticationTypes:
+          description: Supported authentication types for users (or programs).
+          items:
+            oneOf:
+            - $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataSecurityLoSCapabilities.yaml#/components/schemas/DataSecurityLoSCapabilities_AuthenticationType
+            - enum:
+              - null
+          readOnly: false
+          type: array
+          x-longDescription: The enumeration literal shall specify supported authentication
+            types for users (or programs).
+      required:
+      - '@odata.id'
+      - '@odata.type'
+      - Id
+      - Name
+      type: object
+      x-longDescription: This resource may be used to describe data security capabilities.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    DataSecurityLoSCapabilities_v1_1_1_OemActions:
+      additionalProperties: true
+      description: The available OEM specific actions for this resource.
+      properties: {}
+      type: object
+      x-longDescription: This type shall contain any additional OEM actions for this
+        resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+title: '#DataSecurityLoSCapabilities.v1_1_1.DataSecurityLoSCapabilities'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA
+x-release: 1.0.5

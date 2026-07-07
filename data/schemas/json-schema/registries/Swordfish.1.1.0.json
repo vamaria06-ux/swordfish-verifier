@@ -1,0 +1,152 @@
+{
+    "@Redfish.Copyright": "Copyright 2017-2018 Storage Networking Industry Association (SNIA), USA. All rights reserved. For the full SNIA copyright policy, see http://www.snia.org/about/corporate_info/copyright",
+    "@odata.type": "#MessageRegistry.v1_2_0.MessageRegistry",
+    "Id": "Swordfish.1.1.0",
+    "Name": "Swordfish Message Registry",
+    "Language": "en",
+    "Description": "This registry defines the event messages for Swordfish.  This registry has been deprecated in favor of the Storage and StorageCoS registries.",
+    "RegistryPrefix": "Swordfish",
+    "RegistryVersion": "1.1.0",
+    "OwningEntity": "SNIA",
+    "Messages": {
+        "LowSpaceWarningThresholdTriggered": {
+            "Description": "Indicates that a LowSpaceWarningThreshold has been triggered.",
+            "LongDescription": "Indicates that a LowSpaceWarningThreshold has been triggered. For some resource types, adding more capacity may resolve the low space warning. Other suggested resolutions may be provided as OEM data.",
+            "Message": "The LowSpaceWarningThreshold %1 has been triggered on %2.",
+            "Deprecated": "This message was deprecated in favor of the LowSpaceWarningThresholdTriggered messages in Storage.",
+            "VersionDeprecated": "1.1.0",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 2,
+            "ArgDescriptions": [
+                "Threshold value",
+                "Resource name"
+            ],
+            "ArgLongDescriptions": [
+                "The threshold value that has been exceeded.",
+                "The name of the resource for which the threshold value has been exceeded."
+            ],
+            "ParamTypes": [
+                "number",
+                "string"
+            ],
+            "Resolution": "Resolution dependent upon resource type."
+        },
+        "LowSpaceWarningThresholdCleared": {
+            "Description": "Indicates that a LowSpaceWarningThreshold has been cleared.",
+            "LongDescription": "A previously triggered low space condition has been resolved.",
+            "Message": "The LowSpaceWarningThreshold %1 has been cleared on %2.",
+            "Deprecated": "This message was deprecated in favor of the LowSpaceWarningThresholdCleared messages in Storage.",
+            "VersionDeprecated": "1.1.0",
+            "MessageSeverity": "OK",
+            "NumberOfArgs": 2,
+            "ParamTypes": [
+                "number",
+                "string"
+            ],
+            "ArgDescriptions": [
+                "Threshold value",
+                "Resource name"
+            ],
+            "ArgLongDescriptions": [
+                "The threshold value that has been exceeded.",
+                "ResourceNameThe name of the resource for which the threshold value has been exceeded."
+            ],
+            "Resolution": "None."
+        },
+        "SearchFailed": {
+            "Description": "Indicates that a search failed.",
+            "LongDescription": "Indicates that a search failed.",
+            "Message": "Object `%1` not found that matched requested parameters.",
+            "Deprecated": "This message was deprecated in favor of the Query messages in Redfish base.",
+            "VersionDeprecated": "1.1.0",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "Object type"
+            ],
+            "ArgLongDescriptions": [
+                "The object type that was not found by the submitted query"
+            ],
+            "Resolution": "Retry search with different parameters."
+        },
+        "NoDefaultValue": {
+            "Description": "Indicates that no default value was set.",
+            "LongDescription": "Indicates that no default value was set.",
+            "Deprecated": "This message was deprecated in favor of `PropertyMissing`.",
+            "VersionDeprecated": "1.1.0",
+            "Message": "No default value has been set for property `%1`.",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "PropertyName"
+            ],
+            "ArgLongDescriptions": [
+                "The name of the property that does not have a default property defined"
+            ],
+            "Resolution": "Assign a default value for the property."
+        },
+        "ClassOfServiceOutOfCompliance": {
+            "Description": "Indicates that the class of service is out of compliance.",
+            "LongDescription": "The requirements for the named class of service have not been met.",
+            "Message": "The service level requirements of the %1 class of service are out of compliance.",
+            "Deprecated": "This message was deprecated in favor of `ClassOfServiceOutOfCompliance` in the StorageCoS registry.",
+            "VersionDeprecated": "1.1.0",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "ClassOfService name"
+            ],
+            "ArgLongDescriptions": [
+                "Name of the class of service that is out of compliance."
+            ],
+            "Resolution": "Resolution dependent upon class of service and resource type."
+        },
+        "LineOfServiceOutOfCompliance": {
+            "Description": "Indicates that the line of service is out of compliance.",
+            "LongDescription": "The requirements for the named line of service have not been met.",
+            "Message": "The service level requirements of the %1 line of service are out of compliance.",
+            "Deprecated": "This message was deprecated in favor of `LineOfServiceOutOfCompliance` in the StorageCoS registry.",
+            "VersionDeprecated": "1.1.0",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "LineOfService name"
+            ],
+            "ArgLongDescriptions": [
+                "Name of the line of service that is out of compliance."
+            ],
+            "Resolution": "Resolution dependent upon line of service and resource type."
+        },
+        "OutOfCompliance": {
+            "Description": "Indicates that the service level requirements are out of compliance.",
+            "LongDescription": "Indicates that the service level requirements are out of compliance.",
+            "Message": "The service level requirements of %1 are out of compliance.",
+            "Deprecated": "This message was deprecated in favor of `OutOfCompliance` in the StorageCoS registry.",
+            "VersionDeprecated": "1.1.0",
+            "MessageSeverity": "Warning",
+            "NumberOfArgs": 1,
+            "ParamTypes": [
+                "string"
+            ],
+            "ArgDescriptions": [
+                "resource name"
+            ],
+            "ArgLongDescriptions": [
+                "Name of the resource that is out of compliance."
+            ],
+            "Resolution": "Resolution dependent upon service level and resource type."
+        }
+    }
+}

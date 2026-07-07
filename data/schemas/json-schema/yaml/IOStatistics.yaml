@@ -1,0 +1,12 @@
+components:
+  schemas:
+    IOStatistics_IOStatistics:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/IOStatistics.v1_0_4.yaml#/components/schemas/IOStatistics_v1_0_4_IOStatistics
+      description: The properties of this type represent IO statistics.
+      x-longDescription: The properties of this type shall be used to represent the
+        IO statistics of the requested object.
+title: '#IOStatistics'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

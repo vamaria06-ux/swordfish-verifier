@@ -1,0 +1,21 @@
+components:
+  schemas:
+    IOPerformanceLoSCapabilities_IOPerformanceLoSCapabilities:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/IOPerformanceLoSCapabilities.v1_3_0.yaml#/components/schemas/IOPerformanceLoSCapabilities_v1_3_0_IOPerformanceLoSCapabilities
+      description: Describe IO performance capabilities.
+      x-longDescription: Each instance of IOPerformanceLoSCapabilities shall describe
+        the capabilities of the system to support various IO performance service options.
+    IOPerformanceLoSCapabilities_IOWorkload:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/IOPerformanceLoSCapabilities.v1_3_0.yaml#/components/schemas/IOPerformanceLoSCapabilities_v1_3_0_IOWorkload
+      description: An IO Workload description.
+      x-longDescription: This structure may be used to describe an IO Workload.
+    IOPerformanceLoSCapabilities_IOWorkloadComponent:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/IOPerformanceLoSCapabilities.v1_3_0.yaml#/components/schemas/IOPerformanceLoSCapabilities_v1_3_0_IOWorkloadComponent
+      description: Describe a component of a IO workload.
+      x-longDescription: This structure may be used to describe a component of an
+        IO workload.
+title: '#IOPerformanceLoSCapabilities.IOPerformanceLoSCapabilities'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

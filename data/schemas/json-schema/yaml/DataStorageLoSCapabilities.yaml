@@ -1,0 +1,58 @@
+components:
+  schemas:
+    DataStorageLoSCapabilities_DataStorageLoSCapabilities:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/DataStorageLoSCapabilities.v1_2_2.yaml#/components/schemas/DataStorageLoSCapabilities_v1_2_2_DataStorageLoSCapabilities
+      description: Describe data storage and provisioning capabilities.
+      x-longDescription: This resource shall be used to describe storage availability
+        and provisioning capabilities.
+    DataStorageLoSCapabilities_ProvisioningPolicy:
+      description: Space provisioning policy.
+      enum:
+      - Fixed
+      - Thin
+      type: string
+      x-enumDescriptions:
+        Fixed: Storage is fully allocated.
+        Thin: Storage may be over allocated.
+      x-enumLongDescriptions:
+        Fixed: This enumeration literal specifies storage shall be fully allocated.
+        Thin: This enumeration literal specifies storage may be over allocated.
+      x-longDescription: The enumeration literals may be used to specify space provisioning
+        policy.
+    DataStorageLoSCapabilities_StorageAccessCapability:
+      description: Values of StorageAccessCapability describe abilities to read or
+        write storage.
+      enum:
+      - Read
+      - Write
+      - WriteOnce
+      - Append
+      - Streaming
+      - Execute
+      type: string
+      x-enumDescriptions:
+        Append: AppendOnly.
+        Execute: Execute access is allowed by the file share.
+        Read: Read.
+        Streaming: Streaming.
+        Write: Write Many.
+        WriteOnce: WriteOnce.
+      x-enumLongDescriptions:
+        Append: This enumeration literal shall indicate that the storage may be written
+          only to append.
+        Execute: This value shall indicate that Execute access is allowed by the file
+          share.
+        Read: This enumeration literal shall indicate that the storage may be read.
+        Streaming: This enumeration literal shall indicate that the storage may be
+          read sequentially.
+        Write: This enumeration literal shall indicate that the storage may be written
+          multiple times.
+        WriteOnce: This enumeration literal shall indicate that the storage may be
+          written only once.
+      x-longDescription: StorageAccessCapability enumeration literals may be used
+        to describe abilities to read or write storage.
+title: '#DataStorageLoSCapabilities.DataStorageLoSCapabilities'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

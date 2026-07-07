@@ -1,0 +1,38 @@
+components:
+  schemas:
+    NVMeFirmwareImage_NVMeDeviceType:
+      enum:
+      - Drive
+      - JBOF
+      - FabricAttachArray
+      type: string
+      x-enumDescriptions:
+        Drive: Specifies an  device type of Drive, indicating a NVMe device that presents
+          as an NVMe SSD device.
+        FabricAttachArray: Specifies an  NVMe device type of FabricAttachArray, indicating
+          a NVMe device that presents an NVMe front-end that abstracts the back end
+          storage, typically with multiple options for availability and protection.
+        JBOF: Specifies an  device type of JBOF, indicating a NVMe device that presents
+          as an NVMe smart enclosure for NVMe devices, typically NVMe Drives.
+      x-enumLongDescriptions:
+        Drive: Specifies an  device type of Drive, indicating a NVMe device that presents
+          as an NVMe SSD device.
+        FabricAttachArray: Specifies an  NVMe device type of FabricAttachArray, indicating
+          a NVMe device that presents an NVMe front-end that abstracts the back end
+          storage, typically with multiple options for availability and protection.
+        JBOF: Specifies an  device type of JBOF, indicating a NVMe device that presents
+          as an NVMe smart enclosure for NVMe devices, typically NVMe Drives.
+    NVMeFirmwareImage_NVMeFirmwareImage:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/NVMeFirmwareImage.v1_2_0.yaml#/components/schemas/NVMeFirmwareImage_v1_2_0_NVMeFirmwareImage
+      deprecated: true
+      description: This is the schema definition for NVMe Domain firmware image properties.
+      x-deprecatedReason: This schema has been deprecated in favor of the SoftwareInventory
+        schema.
+      x-longDescription: This resource shall be used to represent a the NVMe Domain
+        firmware image properties.
+      x-versionDeprecated: v1_2_0
+title: '#NVMeFirmwareImage.NVMeFirmwareImage'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

@@ -1,0 +1,12 @@
+components:
+  schemas:
+    IOConnectivityLoSCapabilities_IOConnectivityLoSCapabilities:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/IOConnectivityLoSCapabilities.v1_2_0.yaml#/components/schemas/IOConnectivityLoSCapabilities_v1_2_0_IOConnectivityLoSCapabilities
+      description: Describe IO connectivity capabilities.
+      x-longDescription: This resource shall be used to describe the capabilities
+        to provide IO connectivity.
+title: '#IOConnectivityLoSCapabilities.IOConnectivityLoSCapabilities'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

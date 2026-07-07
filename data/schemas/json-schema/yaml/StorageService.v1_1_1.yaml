@@ -1,0 +1,297 @@
+components:
+  schemas:
+    StorageService_v1_1_1_Actions:
+      additionalProperties: false
+      description: The available actions for this resource.
+      properties:
+        '#StorageService.SetEncryptionKey':
+          $ref: '#/components/schemas/StorageService_v1_1_1_SetEncryptionKey'
+        Oem:
+          $ref: '#/components/schemas/StorageService_v1_1_1_OemActions'
+          description: This property contains the available OEM specific actions for
+            this resource.
+          x-longDescription: This property shall contain any additional OEM actions
+            for this resource.
+      type: object
+      x-longDescription: The Actions property shall contain the available actions
+        for this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StorageService_v1_1_1_Links:
+      additionalProperties: false
+      description: Contains links to other resources that are related to this resource.
+      properties:
+        DataProtectionLoSCapabilities:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          deprecated: true
+          description: The data protection capabilities of this service.
+          readOnly: false
+          x-deprecatedReason: Moved up to StorageServices
+          x-longDescription: The value shall reference the data protection capabilities
+            of this service.
+        DataSecurityLoSCapabilities:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          deprecated: true
+          description: The data security capabilities of this service.
+          readOnly: false
+          x-deprecatedReason: Moved up to StorageServices
+          x-longDescription: The value shall reference the data security capabilities
+            of this service.
+        DataStorageLoSCapabilities:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          deprecated: true
+          description: The data storage capabilities of this service.
+          readOnly: false
+          x-deprecatedReason: Moved up to StorageServices
+          x-longDescription: The value shall reference the data storage capabilities
+            of this service.
+        DefaultClassOfService:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          deprecated: true
+          description: The default class of service for entities allocated by this
+            storage service.
+          readOnly: false
+          x-deprecatedReason: DefaultClassOfService moved outside of Links complex
+            type.
+          x-longDescription: If present, this property shall reference the default
+            class of service for entities allocated by this storage service. This
+            default may be overridden by the DefaultClassOfService property values
+            within contained StoragePools.
+        HostingSystem:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: The hosting system or storage controller hosting this storage
+            service.
+          x-longDescription: The value shall reference the ComputerSystem or StorageController
+            that hosts this service.
+        IOConnectivityLoSCapabilities:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          deprecated: true
+          description: The IO connectivity capabilities of this service.
+          readOnly: false
+          x-deprecatedReason: Moved up to StorageServices
+          x-longDescription: The value shall reference the IO connectivity capabilities
+            of this service.
+        IOPerformanceLoSCapabilities:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          deprecated: true
+          description: The IO performance capabilities of this service.
+          readOnly: false
+          x-deprecatedReason: Moved up to StorageServices
+          x-longDescription: The value shall reference the IO performance capabilities
+            of this service.
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties contained in this object shall conform to the Redfish
+            Specification-described requirements.
+      type: object
+      x-longDescription: This property shall contain links to other resources related
+        to this resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StorageService_v1_1_1_OemActions:
+      additionalProperties: true
+      description: The available OEM specific actions for this resource.
+      properties: {}
+      type: object
+      x-longDescription: This type shall contain any additional OEM actions for this
+        resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StorageService_v1_1_1_SetEncryptionKey:
+      additionalProperties: false
+      description: This action is used to set the encryption key for the storage subsystem.
+      properties:
+        target:
+          description: Link to invoke action
+          format: uri-reference
+          type: string
+        title:
+          description: Friendly action name
+          type: string
+      type: object
+      x-longDescription: This defines the name of the custom action supported on this
+        resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StorageService_v1_1_1_SetEncryptionKeyRequestBody:
+      additionalProperties: false
+      description: This action is used to set the encryption key for the storage subsystem.
+      properties:
+        EncryptionKey:
+          description: The encryption key to set on the storage subsystem.
+          type: string
+          x-longDescription: This defines the property name for the action.
+      type: object
+      x-longDescription: This defines the name of the custom action supported on this
+        resource.
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+    StorageService_v1_1_1_StorageService:
+      additionalProperties: false
+      description: Collection of resources that are managed and exposed to hosts as
+        a group.
+      properties:
+        '@odata.context':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_context
+        '@odata.etag':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_etag
+        '@odata.id':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_id
+        '@odata.type':
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_type
+        Actions:
+          $ref: '#/components/schemas/StorageService_v1_1_1_Actions'
+          description: The available actions for this resource.
+          x-longDescription: The Actions property shall contain the available actions
+            for this resource.
+        ClassesOfService:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: The ClassesOfService that all storage in this StorageService
+            can support.
+          readOnly: false
+          x-longDescription: The value of each entry in the array shall reference
+            a ClassOfService supported by this service.
+        ClientEndpointGroups:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          deprecated: true
+          description: Client endpoint groups.
+          readOnly: false
+          x-deprecatedReason: Deprecated in favor of EndpointGroups. The GroupType
+            property of EndpointGroup already distinguishes between use for Server
+            or Client.
+          x-longDescription: The value of each entry in the array shall reference
+            an EndpointGroup.
+        Description:
+          oneOf:
+          - $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Description
+          - enum:
+            - null
+          readOnly: true
+        Drives:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: The set of drives managed by this storage service.
+          readOnly: true
+          x-longDescription: A collection that indicates all the drives managed by
+            this storage service.
+        EndpointGroups:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: Client and Server endpoint groups.
+          readOnly: false
+          x-longDescription: The value of each entry in the array shall reference
+            an EndpointGroup.
+        Endpoints:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: Endpoints.
+          readOnly: true
+          x-longDescription: The value of each entry in the array shall reference
+            an Endpoint managed by this service.
+        FileSystems:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: FileSystems.
+          readOnly: false
+          x-longDescription: An array of references to FileSystems managed by this
+            storage service.
+        Id:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Id
+          readOnly: true
+        Identifier:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Identifier
+          description: The value identifies this resource.
+          x-longDescription: The value identifies this resource.  The value shall
+            be unique within the managed ecosystem.
+        Links:
+          $ref: '#/components/schemas/StorageService_v1_1_1_Links'
+          description: Contains links to other resources that are related to this
+            resource.
+          x-longDescription: This property shall contain links to other resources
+            that are related to this resource.
+        Name:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Name
+          readOnly: true
+        Oem:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Oem
+          description: The OEM extension property.
+          x-longDescription: This property shall contain the OEM extensions.  All
+            values for properties that this object contains shall conform to the Redfish
+            Specification-described requirements.
+        Redundancy:
+          description: Redundancy information for the storage subsystem.
+          items:
+            $ref: http://redfish.dmtf.org/schemas/v1/Redundancy.yaml#/components/schemas/Redundancy_Redundancy
+          readOnly: true
+          type: array
+          x-autoExpand: true
+          x-longDescription: This collection shall contain the redundancy information
+            for the storage subsystem.
+        Redundancy@odata.count:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_count
+        ServerEndpointGroups:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          deprecated: true
+          description: Server endpoint groups.
+          readOnly: false
+          x-deprecatedReason: Deprecated in favor of EndpointGroups. The GroupType
+            property of EndpointGroup already distinguishes between use for Server
+            or Client.
+          x-longDescription: The value of each entry in the array shall reference
+            a EndpointGroup.
+        Status:
+          $ref: http://redfish.dmtf.org/schemas/v1/Resource.yaml#/components/schemas/Resource_Status
+          description: The property contains the status of the StorageService.
+          x-longDescription: The property shall contain the status of the StorageService.
+        StorageGroups:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: StorageGroups.
+          readOnly: true
+          x-longDescription: The value of each entry in the array shall reference
+            a StorageGroup.
+        StoragePools:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: StoragePools.
+          readOnly: true
+          x-longDescription: An array of references to StoragePools.
+        StorageSubsystems:
+          description: A reference to storage subsystems managed by this storage service.
+          items:
+            $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          readOnly: true
+          type: array
+          x-longDescription: The value shall be a link to a collection of type StorageCollection
+            having members that represent storage subsystems managed by this storage
+            service.
+          x-versionAdded: v1_0_1
+        StorageSubsystems@odata.count:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_count
+        Volumes:
+          $ref: http://redfish.dmtf.org/schemas/v1/odata-v4.yaml#/components/schemas/odata-v4_idRef
+          description: Volumes.
+          readOnly: false
+          x-longDescription: An array of references to Volumes managed by this storage
+            service.
+      required:
+      - '@odata.id'
+      - '@odata.type'
+      - Id
+      - Name
+      type: object
+      x-longDescription: 'Collection of resources that the system can make available
+        to one or more host systems.  The collection can contain: block, file, or
+        object storage; local system access points through which the collection is
+        made available; hosts, or host access points to which the collection is made
+        available.'
+      x-patternProperties:
+        ^([a-zA-Z_][a-zA-Z0-9_]*)?@(odata|Redfish|Message)\.[a-zA-Z_][a-zA-Z0-9_]*$:
+          description: This property shall specify a valid odata or Redfish property.
+title: '#StorageService.v1_1_1.StorageService'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA
+x-release: 1.0.6

@@ -1,0 +1,12 @@
+components:
+  schemas:
+    StorageServiceMetrics_StorageServiceMetrics:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StorageServiceMetrics.v1_1_0.yaml#/components/schemas/StorageServiceMetrics_v1_1_0_StorageServiceMetrics
+      description: The usage and health statistics for a storage service.
+      x-longDescription: The StorageServiceMetrics schema shall contain the usage
+        and health statistics for a storage service in a Redfish implementation.
+title: '#StorageServiceMetrics.StorageServiceMetrics'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

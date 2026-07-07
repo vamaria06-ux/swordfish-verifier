@@ -1,0 +1,12 @@
+components:
+  schemas:
+    StorageService_StorageService:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/StorageService.v1_7_0.yaml#/components/schemas/StorageService_v1_7_0_StorageService
+      description: A storage service.
+      x-longDescription: This resource shall be used to represent resources that are
+        managed by a storage service.
+title: '#StorageService.StorageService'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

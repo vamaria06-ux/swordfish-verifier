@@ -1,0 +1,175 @@
+{
+    "@Redfish.Copyright": "Copyright 2019-2022 SNIA. All rights reserved.",
+    "@odata.type": "#FeaturesRegistry.v1_1_1.FeaturesRegistry",
+    "Id": "SwordfishFeatures.1.4.0",
+    "Name": "Swordfish Features Registry",
+    "Language": "en",
+    "Description": "This registry defines the Swordfish features.",
+    "RegistryPrefix": "SwordfishFeatures",
+    "RegistryVersion": "1.4.0",
+    "OwningEntity": "SNIA",
+    "Features": [
+        {
+            "FeatureName": "SNIA.Swordfish.Block.CapacityManagement",
+            "Description": "Supports the Swordfish Block Capacity Management Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishBlockCapacityManagement.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.CoSLocalReplication",
+            "Description": "Supports the local replication for block storage Feature when using the Swordfish Class Of Service Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishBlockCoSLocalReplication.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.CoSRemoteReplication",
+            "Description": "Supports the remote replication for block storage Feature when using the Swordfish Class Of Service Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishBlockRemoteReplication.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.LocalReplication",
+            "Description": "Supports the local replication for block storage Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishBlockLocalReplication.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.MappingMasking",
+            "Description": "Supports the Swordfish Block Mapping and Masking Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishBlockMappingMasking.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.Provisioning",
+            "Description": "Supports the Block Provisioning Feature.",
+            "Version": "1.2.0",
+            "CorrespondingProfileDefinition": "SwordfishBlockProvisioning.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Block.RemoteReplication",
+            "Description": "Supports the remote replication for block storage Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishBlockRemoteReplication.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.CoSDiscovery",
+            "Description": "Supports Discovery requirements when using the Swordfish Class Of Service Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishCoSDicovery.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.Discovery",
+            "Description": "Supports discovery of resources in a Swordfish system.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishDiscovery.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.EnergyStar",
+            "Description": "Supports the Swordfish EnergyStar for Storage Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishEnergyStar.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.EventNotification",
+            "Description": "Supports the Swordfish Event Notification Feature.",
+            "Version": "1.2.3",
+            "CorrespondingProfileDefinition": "SwordfishEventNotification.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.FabricAccessRights",
+            "Description": "Supports the Swordfish Fabric Access Rights Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishFabricAccessRights.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.FabricAccessRightsforEthernet",
+            "Description": "Supports the Swordfish Fabric Access Rights for Ethernet Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishFabricAccessRightsforEthernet.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.FabricConnectivityRights",
+            "Description": "Supports the Swordfish Fabric Connectivity Rights Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishFabricConnectivityRights.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.FabricConnectivityRightsforEthernet",
+            "Description": "Supports the Swordfish Fabric Connectivity Rights for Ethernet Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishFabricConnectivityRightsforEthernet.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.FabricConnectivityRightsforRDMA",
+            "Description": "Supports the Swordfish Fabric Connectivity Rights for RDMA Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishFabricConnectivityRightsforRDMA.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.File.CapacityManagement",
+            "Description": "Supports the Swordfish File Capacity Management Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishFileCapacityManagement.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.File.Provisioning",
+            "Description": "Supports the File Provisioning Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishFileProvisioning.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.IOPerformance",
+            "Description": "Supports the Swordfish  IOPerformance Feature.",
+            "Version": "1.1.2",
+            "CorrespondingProfileDefinition": "SwordfishIOPerformance.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.ManagementController",
+            "Description": "Supports the Swordfish Management Controller (e.g., embedded management controller) Feature.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishManagementController.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.NVMeDrive",
+            "Description": "Supports the Swordfish NVMe Drive Feature.",
+            "Version": "1.1.0",
+            "CorrespondingProfileDefinition": "SwordfishNVMeDrive.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.NVMeDriveAdvancedFeatures",
+            "Description": "Supports Advanced Features functionality for NVMe Drives.",
+            "Version": "1.1.0",
+            "CorrespondingProfileDefinition": "SwordfishNVMeDriveAdvancedFeatures.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.NVMeEBOF",
+            "Description": "Supports the NVMe EBOF Feature set.",
+            "Version": "1.1.0",
+            "CorrespondingProfileDefinition": "SwordfishNVMeEBOF.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.NVMeDriveEthernetAttach",
+            "Description": "Supports Ethernet Attach functionality for NVMe Drives.",
+            "Version": "1.1.0",
+            "CorrespondingProfileDefinition": "SwordfishNVMeEthernetAttach.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.NVMeFrontEnd",
+            "Description": "Supports requirements for Swordfish implementations with NVMe front-end interfaces.",
+            "Version": "1.1.0",
+            "CorrespondingProfileDefinition": "SwordfishNVMeFrontEnd.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.NVMeoF",
+            "Description": "Supports the NVMe over Fabrics set.",
+            "Version": "1.0.0",
+            "CorrespondingProfileDefinition": "SwordfishNVMeoF.json"
+        },
+        {
+            "FeatureName": "SNIA.Swordfish.PCIeJBOF",
+            "Description": "Supports the PCIe JBOF Feature set.",
+            "Version": "1.1.0",
+            "CorrespondingProfileDefinition": "SwordfishPCIeJBOF.json"
+        }
+    ]
+}

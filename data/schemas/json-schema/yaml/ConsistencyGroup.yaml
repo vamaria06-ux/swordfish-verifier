@@ -1,0 +1,40 @@
+components:
+  schemas:
+    ConsistencyGroup_ApplicationConsistencyMethod:
+      enum:
+      - HotStandby
+      - VASA
+      - VDI
+      - VSS
+      - Other
+      type: string
+      x-enumDescriptions:
+        HotStandby: Supports consistency method commonly orchestrated using application-specific
+          code.
+        Other: Supports consistency method orchestrated using vendor-specific code.
+        VASA: Supports VMware consistency requirements, such as for VASA and VVOLs.
+        VDI: Supports Microsoft virtual backup device interface (VDI).
+        VSS: Supports Microsoft VSS.
+    ConsistencyGroup_ConsistencyGroup:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/ConsistencyGroup.v1_1_1.yaml#/components/schemas/ConsistencyGroup_v1_1_1_ConsistencyGroup
+      description: A collection of volumes grouped together to ensure write order
+        consistency across all those volumes.
+      x-longDescription: A collection of volumes grouped together to ensure write
+        order consistency across all those volumes. A management operation on a consistency
+        group, such as configuring replication properties, applies to all the volumes
+        within the consistency group.
+    ConsistencyGroup_ConsistencyType:
+      enum:
+      - CrashConsistent
+      - ApplicationConsistent
+      type: string
+      x-enumDescriptions:
+        ApplicationConsistent: Orchestration exists to either flush or halt pending
+          IO to ensure operations occur in a transactionally consistent manner.
+        CrashConsistent: Requested operations are either triggered or instituted without
+          regard to pending IO.
+title: '#ConsistencyGroup.ConsistencyGroup'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

@@ -1,0 +1,26 @@
+# Конфигурация для запуска верификатора против намеренно "сломанного"
+# mock-сервера (mock_server/broken_server.py), см. README.
+#
+# schemas_dir указывает на почти пустую директорию (без файлов схем SNIA),
+# поэтому автоматический парсинг схем не находит совпадений и верификатор
+# использует встроенные (built-in) правила для всех 6 базовых ресурсов.
+# Это сделано намеренно: встроенные правила описывают ресурсы-коллекции
+# (Members/Members@odata.count), а реальные JSON-схемы SNIA для
+# Volume/StoragePool описывают отдельный элемент, а не коллекцию -- их
+# смешение с mock-сервером приводило бы к ложным несоответствиям.
+schemas_dir: "data/schemas/mock"
+emulator_url: "http://localhost:5001"
+timeout: 30
+output_path: "./reports"
+auth:
+  username: "admin"
+  password: "admin"
+# Строго 6 базовых ресурсов спецификации -- ServiceRoot, Systems,
+# StorageSystems и (динамические) StoragePools, Volumes, Drives.
+resources_filter:
+  - "ServiceRoot"
+  - "Systems"
+  - "StorageSystems"
+  - "StoragePools"
+  - "Volumes"
+  - "Drives"

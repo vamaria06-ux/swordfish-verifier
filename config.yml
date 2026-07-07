@@ -1,0 +1,21 @@
+schemas_dir: "data/schemas/json-schema"
+emulator_url: "https://localhost:5000"
+timeout: 30
+output_path: "./reports"
+rules_path: "data/rules.json"
+auth:
+  username: "Administrator"
+  password: "Password"
+# resources_filter не задан -> проверяются строго 6 базовых ресурсов
+# спецификации: ServiceRoot, Systems, StorageSystems, StoragePools,
+# Volumes, Drives (см. README). Даже если schemas_dir содержит намного
+# больше файлов схем SNIA, верификатор не расширяет проверку на них.
+# Чтобы проверять только часть из этих шести ресурсов, раскомментируйте
+# и укажите нужные:
+# resources_filter:
+#   - "ServiceRoot"
+#   - "Systems"
+#   - "StorageSystems"
+#   - "StoragePools"
+#   - "Volumes"
+#   - "Drives"

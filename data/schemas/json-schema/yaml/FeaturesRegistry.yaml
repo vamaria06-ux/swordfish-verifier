@@ -1,0 +1,16 @@
+components:
+  schemas:
+    FeaturesRegistry_FeaturesRegistry:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/FeaturesRegistry.v1_2_1.yaml#/components/schemas/FeaturesRegistry_v1_2_1_FeaturesRegistry
+      description: This is the schema definition for all Features Registries.  It
+        represents the properties for the registries themselves.  The FeatureId is
+        formed per the Redfish specification.  It consists of the RegistryPrefix concatenated
+        with the version concatenated with the unique identifier for the feature registry
+        entry.
+      x-longDescription: This resource shall be used to represent a Feature registry
+        for a Redfish implementation.
+title: '#FeaturesRegistry.FeaturesRegistry'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA

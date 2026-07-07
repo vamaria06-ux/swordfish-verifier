@@ -1,0 +1,12 @@
+components:
+  schemas:
+    VolumeMetrics_VolumeMetrics:
+      $ref: http://redfish.dmtf.org/schemas/swordfish/v1/VolumeMetrics.v1_3_0.yaml#/components/schemas/VolumeMetrics_v1_3_0_VolumeMetrics
+      description: The usage and health statistics for a volume.
+      x-longDescription: The VolumeMetrics schema shall contain the usage and health
+        statistics for a volume in a Redfish implementation.
+title: '#VolumeMetrics.VolumeMetrics'
+x-copyright: Copyright 2015-2026 Storage Networking Industry Association (SNIA), USA.
+  All rights reserved.
+x-language: en
+x-owningEntity: SNIA
