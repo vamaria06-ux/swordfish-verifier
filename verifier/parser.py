@@ -533,7 +533,7 @@ class Parser:
             },
 
             "StorageSystems": {
-                "endpoint":       "/redfish/v1/StorageSystems",
+                "endpoint":       "/redfish/v1/StorageServices",
                 "method":         "GET",
                 "expected_status": 200,
                 "spec_section":   "Таблица 147 — StorageSystemCollection",
@@ -563,12 +563,12 @@ class Parser:
                 }
             },
             "StoragePools": {
-                "endpoint":       "{system_url}/StoragePools",
+                "endpoint":       "/redfish/v1/StorageServices/FileService/StoragePools",
                 "method":         "GET",
                 "expected_status": 200,
                 "spec_section":   "Таблица 129 — StoragePool 1.9.2",
                 "spec_url":       SPEC_URL,
-                "dynamic":        True,
+                "dynamic":        False,
                 "required_fields": {
                     "@odata.type": {
                         "type":        "str",
@@ -594,12 +594,12 @@ class Parser:
             },
 
             "Volumes": {
-                "endpoint":       "{system_url}/Volumes",
+                "endpoint":       "/redfish/v1/StorageServices/FileService/Volumes",
                 "method":         "GET",
                 "expected_status": 200,
                 "spec_section":   "Таблица 148 — Volume 1.11.0",
                 "spec_url":       SPEC_URL,
-                "dynamic":        True,
+                "dynamic":        False,
                 "required_fields": {
                     "@odata.type": {
                         "type":        "str",
@@ -625,12 +625,12 @@ class Parser:
             },
 
             "Drives": {
-                "endpoint":       "{system_url}/Drives",
+                "endpoint":       "/redfish/v1/StorageServices/FileService/Drives",
                 "method":         "GET",
                 "expected_status": 200,
                 "spec_section":   "Раздел 5 — Swordfish Overview",
                 "spec_url":       SPEC_URL,
-                "dynamic":        True,
+                "dynamic":        False,
                 "required_fields": {
                     "@odata.type": {
                         "type":        "str",
