@@ -1,17 +1,11 @@
- 
-specification_path: "./specs/schemas"
+schemas_dir: "data/schemas/json-schema"
 emulator_url: "http://localhost:8080"
 timeout: 10
 output_path: "./reports"
- 
 auth:
-  type: "basic"
   username: "admin"
   password: "admin"
- 
 resources_filter:
-  - "StorageSystems"
-  - "StoragePools"
-  - "Volumes"
-  - "Drives"
- 
+  - "Volume"
+  - "StoragePool"
+  - "Drive"
