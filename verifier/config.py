@@ -60,3 +60,4 @@ def load_config(path: str = "config.yaml") -> Config:
         rules_path=raw.get("rules_path", "data/rules.json"),
         auth=auth,
         resources_filter=raw.get("resources_filter", []),)
+
