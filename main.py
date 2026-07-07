@@ -60,17 +60,29 @@ def menu(title, options):
 
 
 def get_system_urls(client):
-    try:
-        response = client.get("/redfish/v1/StorageSystems")
-        if response is None or response.status_code != 200:
-            return []
+    """
+    Возвращает список @odata.id систем, под которыми лежат динамические
+    ресурсы (StoragePools/Volumes/Drives).
+
+    Сначала пробуем /redfish/v1/StorageSystems (как того требует
+    спецификация Swordfish для storage-ресурсов). Если коллекция
+    недоступна (ошибка соединения, не-200 статус, пустой список Members)
+    -- используем /redfish/v1/Systems как запасной вариант, чтобы
+    динамические проверки не пропускались полностью на серверах/эмуляторах,
+    которые ещё не реализовали StorageSystems (см. mock_server/broken_server.py).
+    """
+    for endpoint in ("/redfish/v1/StorageSystems", "/redfish/v1/Systems"):
         try:
+            response = client.get(endpoint)
+            if response is None or response.status_code != 200:
+                continue
             members = response.json().get("Members", [])
-            return [m["@odata.id"] for m in members if "@odata.id" in m]
+            urls = [m["@odata.id"] for m in members if "@odata.id" in m]
+            if urls:
+                return urls
         except Exception:
-            return []
-    except Exception:
-        return []
+            continue
+    return []
 
 
 def select_resources(rules):
