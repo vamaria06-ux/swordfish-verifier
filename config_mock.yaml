@@ -1,0 +1,11 @@
+emulator_url: "http://localhost:5001"
+timeout: 30
+output_path: "./reports"
+auth:
+  username: "admin"
+  password: "admin"
+resources:
+  - "/redfish/v1/"
+  - "/redfish/v1/StorageSystems"
+  - "/redfish/v1/StorageServices"
+  - "/redfish/v1/Systems"
