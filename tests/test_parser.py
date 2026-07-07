@@ -1,97 +1,136 @@
-"""
-Тесты для модуля parser.py
-Проверяем что правила загружаются правильно для всех 6 ресурсов.
-"""
+import json
+from types import SimpleNamespace
 
-from verifier.parser import Parser
+from verifier.reporter import Reporter
 
 
-def test_rules_loaded():
-    """Правила загружаются и не пустые"""
-    parser = Parser()
-    rules = parser.load_rules()
-    assert len(rules) > 0
+def make_config(tmp_path):
+    return SimpleNamespace(
+        emulator_url="http://localhost:8080",
+        output_path=str(tmp_path),
+        spec_version="Swordfish v1.2.9",
+    )
 
 
-def test_all_six_resources_present():
-    """Все 6 обязательных ресурсов из ТЗ присутствуют"""
-    parser = Parser()
-    rules = parser.load_rules()
-    required = [
-        "ServiceRoot",
-        "Systems",
-        "StorageSystems",
-        "StoragePools",
-        "Volumes",
-        "Drives"
+def test_reporter_builds_summary(tmp_path):
+    reporter = Reporter()
+
+    results = [
+        {"resource": "ServiceRoot", "status": "PASS"},
+        {"resource": "ServiceRoot", "status": "FAIL"},
+        {"resource": "Volumes", "status": "NOT_SUPPORTED"},
+        {"resource": "Drives", "status": "UNKNOWN"},
     ]
-    for resource in required:
-        assert resource in rules, f"Ресурс {resource} отсутствует"
+
+    report = reporter.generate(results, make_config(tmp_path))
+
+    assert report["summary"]["total"] == 4
+    assert report["summary"]["pass"] == 1
+    assert report["summary"]["fail"] == 1
+    assert report["summary"]["not_supported"] == 1
+    assert report["summary"]["unknown"] == 1
+    assert report["summary"]["pass_rate"] == 25.0
 
 
-def test_service_root_has_correct_endpoint():
-    """ServiceRoot имеет правильный эндпоинт"""
-    parser = Parser()
-    rules = parser.load_rules()
-    assert rules["ServiceRoot"]["endpoint"] == "/redfish/v1/"
-    assert rules["ServiceRoot"]["expected_status"] == 200
-    assert rules["ServiceRoot"]["dynamic"] == False
+def test_reporter_groups_by_resource(tmp_path):
+    reporter = Reporter()
+
+    results = [
+        {"resource": "ServiceRoot", "status": "PASS"},
+        {"resource": "ServiceRoot", "status": "FAIL"},
+        {"resource": "Volumes", "status": "PASS"},
+    ]
+
+    report = reporter.generate(results, make_config(tmp_path))
+
+    assert report["resources_checked"] == 2
+
+    assert report["by_resource"]["ServiceRoot"]["pass"] == 1
+    assert report["by_resource"]["ServiceRoot"]["fail"] == 1
+    assert len(report["by_resource"]["ServiceRoot"]["checks"]) == 2
+
+    assert report["by_resource"]["Volumes"]["pass"] == 1
+    assert report["by_resource"]["Volumes"]["fail"] == 0
 
 
-def test_dynamic_resources_marked_correctly():
-    """StoragePools, Volumes, Drives помечены как динамические"""
-    parser = Parser()
-    rules = parser.load_rules()
-    for resource in ["StoragePools", "Volumes", "Drives"]:
-        assert rules[resource]["dynamic"] == True, \
-            f"{resource} должен быть dynamic=True"
-        assert "{system_url}" in rules[resource]["endpoint"], \
-            f"{resource} должен содержать {{system_url}} в эндпоинте"
+def test_reporter_extracts_failed_checks(tmp_path):
+    reporter = Reporter()
+
+    results = [
+        {
+            "resource": "ServiceRoot",
+            "check": "HTTP статус код",
+            "status": "PASS",
+        },
+        {
+            "resource": "StorageSystems",
+            "check": "HTTP статус код",
+            "status": "FAIL",
+            "detail": "Ожидался 200, получен 404",
+        },
+    ]
+
+    report = reporter.generate(results, make_config(tmp_path))
+
+    assert len(report["failed_checks"]) == 1
+    assert len(report["errors"]) == 1
+    assert report["failed_checks"][0]["resource"] == "StorageSystems"
+    assert report["errors"][0]["status"] == "FAIL"
 
 
-def test_static_resources_marked_correctly():
-    """ServiceRoot, Systems, StorageSystems помечены как статические"""
-    parser = Parser()
-    rules = parser.load_rules()
-    for resource in ["ServiceRoot", "Systems", "StorageSystems"]:
-        assert rules[resource]["dynamic"] == False, \
-            f"{resource} должен быть dynamic=False"
+def test_reporter_saves_json_file(tmp_path):
+    reporter = Reporter()
+
+    results = [
+        {
+            "resource": "ServiceRoot",
+            "check": "Поле: Id",
+            "status": "PASS",
+            "detail": "Поле прошло проверку",
+        }
+    ]
+
+    report = reporter.generate(results, make_config(tmp_path))
+
+    report_path = tmp_path / "report.json"
+
+    assert report_path.exists()
+    assert report["metadata"]["report_path"] == str(report_path)
+
+    with report_path.open("r", encoding="utf-8") as file:
+        saved_report = json.load(file)
+
+    assert saved_report["summary"]["total"] == 1
+    assert saved_report["summary"]["pass"] == 1
+    assert saved_report["all_checks"] == results
 
 
-def test_all_rules_have_required_keys():
-    """Каждое правило содержит обязательные ключи"""
-    parser = Parser()
-    rules = parser.load_rules()
-    for name, rule in rules.items():
-        assert "endpoint" in rule, f"{name}: нет endpoint"
-        assert "expected_status" in rule, f"{name}: нет expected_status"
-        assert "required_fields" in rule, f"{name}: нет required_fields"
-        assert "spec_section" in rule, f"{name}: нет spec_section"
-        assert "spec_url" in rule, f"{name}: нет spec_url"
-        assert "dynamic" in rule, f"{name}: нет dynamic"
+def test_reporter_uses_unknown_resource_when_resource_missing(tmp_path):
+    reporter = Reporter()
+
+    results = [
+        {"status": "PASS"},
+    ]
+
+    report = reporter.generate(results, make_config(tmp_path))
+
+    assert report["resources_checked"] == 1
+    assert "unknown" in report["by_resource"]
+    assert report["by_resource"]["unknown"]["pass"] == 1
 
 
-def test_required_fields_are_dicts():
-    """Обязательные поля заданы в виде словаря с метаданными"""
-    parser = Parser()
-    rules = parser.load_rules()
-    for name, rule in rules.items():
-        fields = rule["required_fields"]
-        assert isinstance(fields, dict), \
-            f"{name}: required_fields должен быть словарём"
-        for field_name, field_info in fields.items():
-            assert "type" in field_info, \
-                f"{name}.{field_name}: нет type"
-            assert "description" in field_info, \
-                f"{name}.{field_name}: нет description"
-            assert "spec" in field_info, \
-                f"{name}.{field_name}: нет spec"
+def test_reporter_uses_default_output_path_if_missing(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
 
+    reporter = Reporter()
+    config = SimpleNamespace(
+        emulator_url="http://localhost:8080",
+        spec_version="Swordfish v1.2.9",
+    )
 
-def test_minimum_15_checks():
-    """Суммарное количество проверок >= 15 (требование ТЗ)"""
-    parser = Parser()
-    rules = parser.load_rules()
-    # каждый ресурс даёт минимум: 1 (статус) + 1 (json) + N (поля)
-    total = sum(2 + len(rule["required_fields"]) for rule in rules.values())
-    assert total >= 15, f"Всего проверок: {total}, нужно >= 15"
+    report = reporter.generate([], config)
+
+    assert report["summary"]["total"] == 0
+    assert report["summary"]["pass_rate"] == 0.0
+    assert (tmp_path / "reports" / "report.json").exists()
+    

@@ -5,7 +5,7 @@ Swordfish API Verifier v1.0
 
 import logging
 import sys
-from verifier.config import Config
+from verifier.config import load_config
 from verifier.http_client import HttpClient
 from verifier.parser import Parser
 from verifier.validator import Validator
@@ -37,16 +37,17 @@ def menu(title, options):
 
 
 def get_system_urls(client):
-    """
-    Получает список URL всех систем хранения из StorageSystems.
-    Нужно для динамических ресурсов: StoragePools, Volumes, Drives.
-    """
-    response = client.get("/redfish/v1/StorageSystems")
-    if response is None:
+    try:
+        response = client.get("/redfish/v1/StorageSystems")
+        if response is None or response.status_code != 200:
+            return []
+        try:
+            members = response.json().get("Members", [])
+            return [m["@odata.id"] for m in members if "@odata.id" in m]
+        except Exception:
+            return []
+    except Exception:
         return []
-    members = response.json().get("Members", [])
-    return [m["@odata.id"] for m in members if "@odata.id" in m]
-
 
 def select_resources(rules):
     """
@@ -183,7 +184,7 @@ def main():
             print("  Использую встроенные правила")
 
     #  3. Подключение к эмулятору 
-    config = Config("config.yml", 30, "output")
+    config = load_config("config.yml")
     print(f"\n  Подключение к: {config.emulator_url}")
     client = HttpClient(config)
 
@@ -218,6 +219,7 @@ def main():
     all_results = run_checks(client, validator, rules)
 
     # 7. Отчёт
+    reporter = Reporter()
     report = reporter.generate(all_results, config)
 
     s = report["summary"]

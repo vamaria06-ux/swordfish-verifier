@@ -30,7 +30,7 @@ JSON_TYPE_MAP = {
     "boolean": bool,
 }
 
-# ── Перевод ресурсов → эндпоинты ─────────────────────────────────────────────
+# Перевод ресурсов → эндпоинты 
 # Гриш твой парсер только читает схемы, напрмер для моего main нужны endpoint, вот для этого написна ф-ция
 # Здесь указываем для каждого ресурса его URL и тип (статический/динамический).
 # dynamic=True означает что эндпоинт зависит от id системы:
@@ -353,11 +353,13 @@ def adapt_rules(grgit_rules: Dict) -> Dict:
             field_info = all_fields.get(field_name, {})
             json_type = field_info.get("type", "string")
             python_type = JSON_TYPE_MAP.get(json_type, str)
+            type_name = python_type.__name__
 
             required_fields[field_name] = {
-                "type":        python_type,
+                "type": type_name,
                 "description": field_info.get("description", ""),
-                "spec":        endpoint_info.get("spec_section", ""),
+                "spec": endpoint_info.get("spec_section", ""),
+                "enum": field_info.get("enum", [])
             }
 
         version = grgit_rule.get("version", "unknown")
@@ -472,27 +474,27 @@ class Parser:
                 "dynamic":        False,
                 "required_fields": {
                     "@odata.type": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Тип ресурса OData",
                         "spec":        "Раздел 7.2 — Schema Considerations"
                     },
                     "@odata.id": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Уникальный идентификатор ресурса",
                         "spec":        "Раздел 7.2 — Schema Considerations"
                     },
                     "Id": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Строковый идентификатор ресурса",
                         "spec":        "Таблица 9 — Universal properties"
                     },
                     "Name": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Имя ресурса",
                         "spec":        "Таблица 9 — Universal properties"
                     },
                     "RedfishVersion": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Версия Redfish API",
                         "spec":        "Раздел 8.1 — Service Root"
                     }
@@ -508,22 +510,22 @@ class Parser:
                 "dynamic":        False,
                 "required_fields": {
                     "@odata.type": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Тип коллекции OData",
                         "spec":        "Раздел 7.2 — Schema Considerations"
                     },
                     "@odata.id": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Уникальный идентификатор",
                         "spec":        "Раздел 7.2 — Schema Considerations"
                     },
                     "Members": {
-                        "type":        list,
+                        "type":        "list",
                         "description": "Список систем",
                         "spec":        "Раздел 5 — Swordfish Overview"
                     },
                     "Members@odata.count": {
-                        "type":        int,
+                        "type":        "int",
                         "description": "Количество систем",
                         "spec":        "Раздел 5 — Swordfish Overview"
                     }
@@ -539,22 +541,22 @@ class Parser:
                 "dynamic":        False,
                 "required_fields": {
                     "@odata.type": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Тип коллекции OData",
                         "spec":        "Раздел 7.2 — Schema Considerations"
                     },
                     "@odata.id": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Уникальный идентификатор коллекции",
                         "spec":        "Раздел 7.2 — Schema Considerations"
                     },
                     "Members": {
-                        "type":        list,
+                        "type":        "list",
                         "description": "Список систем хранения",
                         "spec":        "Таблица 147 — StorageSystemCollection"
                     },
                     "Members@odata.count": {
-                        "type":        int,
+                        "type":        "int",
                         "description": "Количество систем хранения",
                         "spec":        "Таблица 147 — StorageSystemCollection"
                     }
@@ -569,22 +571,22 @@ class Parser:
                 "dynamic":        True,
                 "required_fields": {
                     "@odata.type": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Тип коллекции StoragePool",
                         "spec":        "Таблица 129 — StoragePool 1.9.2"
                     },
                     "@odata.id": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Уникальный идентификатор коллекции",
                         "spec":        "Раздел 7.2 — Schema Considerations"
                     },
                     "Members": {
-                        "type":        list,
+                        "type":        "list",
                         "description": "Список пулов хранения",
                         "spec":        "Таблица 129 — StoragePool 1.9.2"
                     },
                     "Members@odata.count": {
-                        "type":        int,
+                        "type":        "int",
                         "description": "Количество пулов хранения",
                         "spec":        "Таблица 129 — StoragePool 1.9.2"
                     }
@@ -600,22 +602,22 @@ class Parser:
                 "dynamic":        True,
                 "required_fields": {
                     "@odata.type": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Тип коллекции Volume",
                         "spec":        "Таблица 148 — Volume 1.11.0"
                     },
                     "@odata.id": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Уникальный идентификатор коллекции",
                         "spec":        "Раздел 7.2 — Schema Considerations"
                     },
                     "Members": {
-                        "type":        list,
+                        "type":        "list",
                         "description": "Список томов хранения",
                         "spec":        "Таблица 148 — Volume 1.11.0"
                     },
                     "Members@odata.count": {
-                        "type":        int,
+                        "type":        "int",
                         "description": "Количество томов",
                         "spec":        "Таблица 148 — Volume 1.11.0"
                     }
@@ -631,25 +633,47 @@ class Parser:
                 "dynamic":        True,
                 "required_fields": {
                     "@odata.type": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Тип коллекции Drive",
                         "spec":        "Раздел 5 — Swordfish Overview"
                     },
                     "@odata.id": {
-                        "type":        str,
+                        "type":        "str",
                         "description": "Уникальный идентификатор коллекции",
                         "spec":        "Раздел 7.2 — Schema Considerations"
                     },
                     "Members": {
-                        "type":        list,
+                        "type":        "list",
                         "description": "Список физических дисков",
                         "spec":        "Раздел 5 — Swordfish Overview"
                     },
                     "Members@odata.count": {
-                        "type":        int,
+                        "type":        "int",
                         "description": "Количество дисков",
                         "spec":        "Раздел 5 — Swordfish Overview"
                     }
                 }
             }
         }
+    
+    def save_rules(self, rules: Dict, output_path: str):
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(rules, f, indent=2, ensure_ascii=False)
+        logger.info(f"Правила сохранены в {output_path}")
+        print(f"Правила сохранены в {output_path}")
+
+if __name__ == "__main__":
+    schemas_dir = "data/schemas/json-schema"
+
+    RESOURCES_TO_PARSE = [
+        "ServiceRoot",
+        "Systems",
+        "StorageSystems",
+        "StoragePools",
+        "Volumes",
+        "Drives"
+    ]
+
+    parser = UniversalSchemaParser(schemas_dir)
+    rules = parser.parse_all(resources_filter=RESOURCES_TO_PARSE)
+    parser.save_rules("data/rules.json")

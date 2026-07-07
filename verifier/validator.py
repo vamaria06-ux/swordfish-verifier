@@ -8,7 +8,6 @@
   3. Валидность JSON
   4. Наличие обязательных полей
   5. Типы данных полей
-  6. Enum значения (если указаны в схеме)
 
 Возвращает список результатов с PASS / FAIL / NOT_SUPPORTED.
 """
@@ -24,7 +23,7 @@ TYPE_NAMES = {
     float: "число",
     list:  "список",
     dict:  "объект",
-    bool:  "булево",
+    bool:  "логическое",
 }
 
 def validate_required_field(data: Dict[str, Any], field_name: str) -> bool:
@@ -60,6 +59,18 @@ def validate_field_type(
         return False
 
     value = data[field_name]
+
+    # Конвертируем строковый тип в Python тип если нужно
+    if isinstance(expected_type, str):
+        type_map = {
+            "string": str, "str": str,
+            "integer": int, "int": int,
+            "number": float, "float": float,
+            "array": list, "list": list,
+            "object": dict, "dict": dict,
+            "boolean": bool, "bool": bool,
+        }
+        expected_type = type_map.get(expected_type, str)
 
     if expected_type == int:
         # True и False — это bool, не int, хотя isinstance(True, int) = True
@@ -121,7 +132,7 @@ class Validator:
                            {
                              "endpoint": "/redfish/v1/",
                              "expected_status": 200,
-                             "dynamic": False,
+                             "spec_section": "...",
                              "required_fields": {
                                "Id": {"type": str, "description": "...", "spec": "..."},
                                ...
@@ -215,36 +226,22 @@ class Validator:
         # Проверки 4-6: Поля из правил
         required_fields = rule.get("required_fields", {})
 
-        # Конвертируем правила из формата parser в формат validate_resource
-        field_rules = []
-        for field_name, field_info in required_fields.items():
-            field_rules.append({
-                "field":          field_name,
-                "type":           field_info.get("type"),
-                "required":       True,
-                "allowed_values": field_info.get("enum", []),
-                "description":    field_info.get("description", ""),
-                "spec":           field_info.get("spec", rule.get("spec_section", "")),
-            })
-
         # Запускаем проверки полей 
-        field_results = validate_resource(body, field_rules)
+        field_results = validate_resource(body, required_fields)
 
         # Конвертируем результаты 
         for fr in field_results:
-            results.append(self._result(
-                resource_name, rule,
-                check=f"Поле: {fr['field']}" if fr["status"] == "PASS"
-                      else f"{'Обязательное поле' if fr['status'] == 'FAIL' else 'Поле'}: {fr['field']}",
-                status=fr["status"],
-                detail=fr["message"],
-                expected=str(fr["expected"]),
-                actual=str(fr["actual"]),
-                spec_section=next(
-                    (r["spec"] for r in field_rules if r["field"] == fr["field"]),
-                    rule.get("spec_section", "")
-                )
-            ))
+            results.append({
+                "resource": resource_name,
+                "check": fr["check"],
+                "status": fr["status"],
+                "endpoint": rule.get("endpoint", ""),
+                "detail": fr["detail"],
+                "expected": str(fr["expected"]),
+                "actual": str(fr["actual"]),
+                "spec_section": fr.get("spec_section", rule.get("spec_section", "")),
+                "spec_url": rule.get("spec_url", "")
+            })
 
         return results
 
@@ -281,114 +278,82 @@ class Validator:
 
 def validate_resource(
     data: Dict[str, Any],
-    rules: List[Dict[str, Any]]
+    required_fields: List[Dict[str, Any]]
 ) -> List[Dict[str, Any]]:
     """
     Проверяет JSON ответ по списку правил.
 
     Принимает:
         data  — словарь из JSON ответа эмулятора
-        rules — список правил, каждое правило — словарь:
-                {
-                  "field":          "Id",
-                  "type":           str,
-                  "required":       True,
-                  "allowed_values": [],     # опционально для enum
-                  "description":    "...",
-                  "spec":           "..."
-                }
+        required_fields  — словарь обязательных полей от парсера:
+            {
+                "Id": {
+                    "type": str,
+                    "description": "...",
+                    "spec": "..."},
+            }
 
     Возвращает:
-        список результатов, каждый результат — словарь:
+        список словарей, каждый из которых описывает одну проверку поля:
         {
-          "field":    "Id",
-          "status":   "PASS" / "FAIL" / "NOT_SUPPORTED",
-          "message":  "пояснение",
-          "expected": "ожидаемое значение",
-          "actual":   "фактическое значение"
+            "check":        "Поле: Id",
+            "status":       "PASS" / "FAIL",
+            "detail":       "пояснение",
+            "expected":     "ожидаемое значение",
+            "actual":       "фактическое значение",
+            "spec_section": "Раздел 7.2 — Schema Considerations",
         }
     """
     results = []
 
-    for rule in rules:
-        field_name     = rule.get("field")
-        expected_type  = rule.get("type")
-        required       = rule.get("required", False)
-        allowed_values = rule.get("allowed_values", [])
-
-        if not field_name:
-            continue
+    for field_name, field_info in required_fields.items():
+        expected_type = field_info.get("type")
+        spec_section = field_info.get("spec", "")
 
         field_exists = field_name in data
         actual_value = data.get(field_name) if field_exists else None
 
-        # ── 1. Проверка наличия поля ─────────────────────────────────────────
+        # 1. Проверка наличия поля
         if not field_exists:
-            if required:
-                results.append({
-                    "field":    field_name,
-                    "status":   "FAIL",
-                    "message":  f"Обязательное поле '{field_name}' отсутствует.",
-                    "expected": "обязательное поле",
-                    "actual":   None
-                })
-            else:
-                results.append({
-                    "field":    field_name,
-                    "status":   "NOT_SUPPORTED",
-                    "message":  f"Необязательное поле '{field_name}' отсутствует.",
-                    "expected": "необязательное поле",
-                    "actual":   None
-                })
+            results.append({
+                "check": f"Обязательное поле: {field_name}",
+                "status": "FAIL",
+                "detail": f"Обязательное поле '{field_name}' отсутствует.",
+                "expected": "обязательное поле",
+                "actual": None,
+                "spec_section": spec_section
+            })
             continue
 
-        # Проверка типа данных
+        # 2. Проверка типа данных
         if expected_type:
             type_valid = validate_field_type(data, field_name, expected_type)
             if not type_valid:
                 expected_name = TYPE_NAMES.get(expected_type, str(expected_type))
-                actual_name   = TYPE_NAMES.get(type(actual_value), str(type(actual_value)))
+                actual_name = TYPE_NAMES.get(type(actual_value), str(type(actual_value)))
                 results.append({
-                    "field":    field_name,
-                    "status":   "FAIL",
-                    "message":  (
+                    "check": f"Поле: {field_name}",
+                    "status": "FAIL",
+                    "detail": (
                         f"Поле '{field_name}' имеет неверный тип. "
                         f"Ожидается: {expected_name}, "
                         f"получен: {actual_name} "
                         f"(значение: {actual_value})"
                     ),
                     "expected": expected_name,
-                    "actual":   actual_name
-                })
-                # Если тип неверный — enum не проверяем
-                continue
-
-        # Проверка enum значений
-        if allowed_values:
-            enum_valid = validate_enum(data, field_name, allowed_values)
-            if not enum_valid:
-                results.append({
-                    "field":    field_name,
-                    "status":   "FAIL",
-                    "message":  (
-                        f"Значение поля '{field_name}' не входит "
-                        f"в допустимый список: {allowed_values}"
-                    ),
-                    "expected": str(allowed_values),
-                    "actual":   str(actual_value)
+                    "actual": actual_name,
+                    "spec_section": spec_section
                 })
                 continue
 
-        # Все проверки пройдены
+        # 3. Все проверки пройдены
         results.append({
-            "field":    field_name,
-            "status":   "PASS",
-            "message":  f"Поле '{field_name}' прошло все проверки.",
-            "expected": (
-                f"тип: {TYPE_NAMES.get(expected_type, str(expected_type)) if expected_type else 'любой'}"
-                + (f", enum: {allowed_values}" if allowed_values else "")
-            ),
-            "actual":   str(actual_value)
+            "check": f"Поле: {field_name}",
+            "status": "PASS",
+            "detail": f"Поле '{field_name}' прошло все проверки.",
+            "expected": f"тип: {TYPE_NAMES.get(expected_type, str(expected_type)) if expected_type else 'любой'}",
+            "actual": str(actual_value),
+            "spec_section": spec_section
         })
 
     return results

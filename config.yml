@@ -1,12 +1,11 @@
+schemas_dir: "data/schemas/json-schema"
 emulator_url: "https://localhost:5000"
 timeout: 30
 output_path: "./reports"
-
+rules_path: "data/rules.json"
 auth:
-  type: "basic"
   username: "Administrator"
   password: "Password"
-
 resources_filter:
   - "StorageSystems"
   - "StoragePools"
