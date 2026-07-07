@@ -258,7 +258,9 @@ class UniversalSchemaParser:
         for filename in files:
             if ':Zone.Identifier' in filename:
                 continue
-            match = re.search(r'\.v(\d+)\.(\d+)\.(\d+)\.json$', filename)
+            # Реальные файлы схем SNIA называются как Volume.v1_11_0.json
+            # (версии через подчёркивание, а не через точку).
+            match = re.search(r'\.v(\d+)_(\d+)_(\d+)\.json$', filename)
             if match:
                 version = tuple(map(int, match.groups()))
             else:
