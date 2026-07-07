@@ -351,9 +351,13 @@ def adapt_rules(grgit_rules: Dict) -> Dict:
 
         for field_name in grgit_required:
             field_info = all_fields.get(field_name, {})
-            json_type = field_info.get("type", "string")
-            python_type = JSON_TYPE_MAP.get(json_type, str)
-            type_name = python_type.__name__
+            json_type = field_info.get("type")
+            python_type = JSON_TYPE_MAP.get(json_type) if json_type else None
+            # Если тип не удалось сопоставить ни с одним известным JSON-типом
+            # (например, сложный $ref или "unknown") -- не подставляем str
+            # "по умолчанию", а честно помечаем тип как неопределённый.
+            # validator.py трактует это как NOT_SUPPORTED, а не ложный FAIL.
+            type_name = python_type.__name__ if python_type else None
 
             required_fields[field_name] = {
                 "type": type_name,
@@ -402,21 +406,51 @@ class Parser:
     def load_rules(
         self,
         spec_path: Optional[str] = None,
-        resources_filter: Optional[List[str]] = None
+        resources_filter: Optional[List[str]] = None,
+        rules_path: Optional[str] = None
     ) -> Dict:
         """
         Загружает правила проверок.
 
+        Порядок приоритета:
+          1. rules_path — если файл существует, правила читаются из него
+                         напрямую. Это заранее сохранённые (см. save_rules())
+                         и, возможно, вручную дополненные/исправленные
+                         формализованные правила.
+          2. spec_path  — если указан, правила строятся автоматически
+                         парсингом JSON схем SNIA.
+          3. иначе      — используются встроенные правила.
+
         :param spec_path: путь к папке с JSON схемами SNIA.
-                         Если None — используются встроенные правила.
         :param resources_filter: список ресурсов для фильтрации.
                                 Если None — загружаются все ресурсы.
+        :param rules_path: путь к заранее сохранённому/вручную дополненному
+                          файлу правил.
         :return: словарь правил в формате validator.py
         """
-        if spec_path:
-            return self._load_from_files(spec_path, resources_filter)
+        if rules_path and os.path.isfile(rules_path):
+            logger.info(f"Загружаю ранее сохранённые правила из: {rules_path}")
+            with open(rules_path, "r", encoding="utf-8") as f:
+                rules = json.load(f)
+        elif spec_path:
+            rules = self._load_from_files(spec_path, resources_filter)
         else:
-            return self._builtin_rules()
+            rules = self._builtin_rules()
+
+        return self._filter_resources(rules, resources_filter)
+
+    @staticmethod
+    def _filter_resources(
+        rules: Dict,
+        resources_filter: Optional[List[str]]
+    ) -> Dict:
+        """Оставляет только ресурсы из resources_filter, если он задан."""
+        if not resources_filter:
+            return rules
+        return {
+            name: rule for name, rule in rules.items()
+            if name in resources_filter
+        }
 
     def _load_from_files(
         self,
