@@ -1,58 +1,62 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
-import yaml
+import yaml 
 class ConfigError(Exception):
-    """Ошибка конфигурации: файл не найден, пуст или не хватает обязательного поля."""
- 
+    """Ошибка конфигурации: файл не найден, пуст или отсутствует обязательное поле."""
 @dataclass
 class AuthConfig:
-    type: str = "basic"
-    username: Optional[str] = None
-    password: Optional[str] = None  
+    username: str
+    password: str
 @dataclass
 class Config:
-    specification_path: str
+    schemas_dir: str
     emulator_url: str
     timeout: int
     output_path: str
+    rules_path: str = "data/rules.json"
     auth: Optional[AuthConfig] = None
-    resources_filter: list[str] = field(default_factory=list) 
-REQUIRED_FIELDS = ["specification_path", "emulator_url", "timeout", "output_path"]
-
+    resources_filter: list[str] = field(default_factory=list)
+    def auth_as_dict(self) -> Optional[dict]:
+        """HttpClient ждёт config.auth["username"] — отдаём словарь."""
+        if self.auth is None:
+            return None
+        return {"username": self.auth.username, "password": self.auth.password}
+REQUIRED_FIELDS = ["schemas_dir", "emulator_url", "timeout", "output_path"]
+ 
 def load_config(path: str = "config.yaml") -> Config:
-    """YAML-файл по пути `path` и возвращает  Config.
-    :raises ConfigError: если файла нет, он пустой, или отсутствуют поля"""
+    """Загружает YAML-файл и возвращает Config.
+    :raises ConfigError: если файла нет, он пустой или отсутствуют обязательные поля."""
     config_path = Path(path)
     if not config_path.exists():
         raise ConfigError(f"Файл конфигурации не найден: {path}")
- 
     with open(config_path, "r", encoding="utf-8") as f:
         raw = yaml.safe_load(f)
- 
     if raw is None:
         raise ConfigError(f"Файл конфигурации пуст: {path}")
- 
     missing = [name for name in REQUIRED_FIELDS if name not in raw]
     if missing:
         raise ConfigError(f"В config.yaml отсутствуют обязательные поля: {', '.join(missing)}")
-    spec_path = Path(raw["specification_path"])
-    if not spec_path.exists():
-        raise ConfigError(f"specification_path указывает на несуществующий путь: {spec_path}")
-    if not spec_path.is_dir():
-        raise ConfigError(f"specification_path должен быть директорией со схемами (*.json), "
-            f"а не файлом: {spec_path}")
  
-    auth_raw = raw.get("auth")
+    schemas_dir = Path(raw["schemas_dir"])
+    if not schemas_dir.exists():
+        raise ConfigError(f"schemas_dir указывает на несуществующий путь: {schemas_dir}")
+    if not schemas_dir.is_dir():
+        raise ConfigError(f"schemas_dir должен быть директорией со схемами (*.json), "
+            f"а не файлом: {schemas_dir}")
+ 
     auth = None
+    auth_raw = raw.get("auth")
     if auth_raw:
-        auth = AuthConfig(type=auth_raw.get("type", "basic"),username=auth_raw.get("username"),password=auth_raw.get("password"),)
+        auth = AuthConfig(
+            username=auth_raw["username"],
+            password=auth_raw["password"],)
  
     return Config(
-        specification_path=raw["specification_path"],
+        schemas_dir=raw["schemas_dir"],
         emulator_url=raw["emulator_url"],
         timeout=raw["timeout"],
         output_path=raw["output_path"],
+        rules_path=raw.get("rules_path", "data/rules.json"),
         auth=auth,
-        resources_filter=raw.get("resources_filter", []),
-    )
+        resources_filter=raw.get("resources_filter", []),)
