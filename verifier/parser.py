@@ -68,6 +68,33 @@ RESOURCE_ENDPOINTS = {
     },
 }
 
+# Каноническая шестёрка базовых ресурсов, которую верификатор проверяет
+# по умолчанию (см. ТЗ и README): ServiceRoot, Systems, StorageSystems,
+# StoragePools, Volumes, Drives. Даже если schemas_dir указывает на полный
+# каталог схем SNIA (в котором может быть множество других ресурсов --
+# Capacity, ClassOfService, ConsistencyGroup и т.д.), верификатор НЕ должен
+# автоматически расширять проверку на них: это не входит в базовый скоуп
+# проекта, и это должно соблюдаться строго.
+CORE_RESOURCES = [
+    "ServiceRoot", "Systems", "StorageSystems",
+    "StoragePools", "Volumes", "Drives",
+]
+
+# Файлы схем SNIA называют ресурсы в единственном числе
+# (Volume.v1_11_0.json, StoragePool.v1_9_2.json и т.д.), в то время как
+# встроенные правила и конфигурация (resources_filter) используют
+# "канонические" имена, соответствующие REST-эндпоинтам коллекций.
+# Сопоставляем одно с другим, чтобы фильтр по резервам работал независимо
+# от источника правил (встроенные правила или автоматический парсинг схем).
+CORE_RESOURCE_SCHEMA_ALIASES = {
+    "Systems": "ComputerSystem",
+    "StorageSystems": "StorageSystem",
+    "StoragePools": "StoragePool",
+    "Volumes": "Volume",
+    "Drives": "Drive",
+}
+
+
 class UniversalSchemaParser:
     """
     Парсер JSON схем спецификации Swordfish/Redfish.
@@ -446,12 +473,30 @@ class Parser:
         rules: Dict,
         resources_filter: Optional[List[str]]
     ) -> Dict:
-        """Оставляет только ресурсы из resources_filter, если он задан."""
+        """
+        Оставляет только ресурсы из resources_filter, если он задан.
+
+        Понимает как канонические имена ресурсов (Systems, Volumes, ...),
+        так и "сырые" имена файлов схем SNIA в единственном числе
+        (ComputerSystem, Volume, ...) -- фильтр работает независимо от
+        того, откуда взято правило: из встроенных правил (канонические
+        имена) или из автоматического парсинга схем (имена файлов схем).
+        """
         if not resources_filter:
             return rules
+
+        wanted = set(resources_filter)
+        for name in resources_filter:
+            alias = CORE_RESOURCE_SCHEMA_ALIASES.get(name)
+            if alias:
+                wanted.add(alias)
+            for canonical, schema_name in CORE_RESOURCE_SCHEMA_ALIASES.items():
+                if schema_name == name:
+                    wanted.add(canonical)
+
         return {
             name: rule for name, rule in rules.items()
-            if name in resources_filter
+            if name in wanted
         }
 
     def _load_from_files(
@@ -461,13 +506,31 @@ class Parser:
     ) -> Dict:
         """
         Загружает правила из JSON схем через UniversalSchemaParser.
-        Если парсинг не дал результатов — падает back на встроенные правила.
+
+        Если resources_filter не задан явно -- НЕ парсим все файлы, какие
+        есть в spec_path (в полном каталоге схем SNIA их могут быть
+        тысячи), а строго ограничиваемся шестью базовыми ресурсами
+        проекта (см. CORE_RESOURCES): ServiceRoot, Systems,
+        StorageSystems, StoragePools, Volumes, Drives.
+
+        Если парсинг не дал результатов -- падает back на встроенные правила.
         """
         logger.info(f"Загружаю схемы из: {spec_path}")
 
+        if resources_filter:
+            schema_filter = set(resources_filter)
+            for name in resources_filter:
+                alias = CORE_RESOURCE_SCHEMA_ALIASES.get(name)
+                if alias:
+                    schema_filter.add(alias)
+        else:
+            schema_filter = set(CORE_RESOURCES) | set(
+                CORE_RESOURCE_SCHEMA_ALIASES.values()
+            )
+
         grgit_parser = UniversalSchemaParser(spec_path)
         grgit_rules = grgit_parser.parse_all(
-            resources_filter=resources_filter
+            resources_filter=list(schema_filter)
         )
 
         if not grgit_rules:
@@ -483,17 +546,27 @@ class Parser:
             f"Загружено из схем: {len(adapted)} ресурсов"
         )
 
-        # Добавляем встроенные правила для ресурсов которых нет в схемах
-        # (например ServiceRoot обычно не идёт отдельным файлом схемы)
+        # Добавляем встроенные правила для ресурсов которых нет в схемах.
+        # Один и тот же базовый ресурс может быть представлен либо
+        # каноническим именем (например ServiceRoot обычно не идёт
+        # отдельным файлом схемы), либо именем файла схемы SNIA
+        # (например "Volume" вместо "Volumes") -- проверяем оба варианта,
+        # чтобы не проверять один и тот же ресурс дважды под разными
+        # именами.
         builtin = self._builtin_rules()
         for resource_name, rule in builtin.items():
-            if resource_name not in adapted:
-                adapted[resource_name] = rule
-                logger.info(
-                    f"Добавлено из встроенных: {resource_name}"
-                )
+            if resource_name in adapted:
+                continue
+            alias = CORE_RESOURCE_SCHEMA_ALIASES.get(resource_name)
+            if alias and alias in adapted:
+                continue
+            adapted[resource_name] = rule
+            logger.info(
+                f"Добавлено из встроенных: {resource_name}"
+            )
 
         return adapted
+
 
     def _builtin_rules(self) -> Dict:
         """
