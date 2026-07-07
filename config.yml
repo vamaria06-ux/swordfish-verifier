@@ -6,8 +6,12 @@ rules_path: "data/rules.json"
 auth:
   username: "Administrator"
   password: "Password"
-resources_filter:
-  - "StorageSystems"
-  - "StoragePools"
-  - "Volumes"
-  - "Drives"
+# resources_filter не задан -> проверяются все доступные ресурсы (см. README).
+# Чтобы проверять только часть ресурсов, раскомментируйте и укажите нужные:
+# resources_filter:
+#   - "ServiceRoot"
+#   - "Systems"
+#   - "StorageSystems"
+#   - "StoragePools"
+#   - "Volumes"
+#   - "Drives"
