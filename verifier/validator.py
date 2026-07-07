@@ -8,8 +8,17 @@
   3. Валидность JSON
   4. Наличие обязательных полей
   5. Типы данных полей
+  6. Значения enum-полей (если заданы в схеме)
 
 Возвращает список результатов с PASS / FAIL / NOT_SUPPORTED.
+
+NOT_SUPPORTED используется в двух случаях:
+  - ресурс отсутствует и во встроенных правилах, и в загруженной
+    спецификации (верификатор не знает, как его проверять);
+  - тип поля не удалось определить по спецификации (например, сложный
+    $ref, который текущая версия парсера не умеет разворачивать) —
+    в этом случае проверка типа не выполняется, чтобы не выдавать
+    ложный FAIL.
 """
 
 import logging
@@ -25,6 +34,7 @@ TYPE_NAMES = {
     dict:  "объект",
     bool:  "логическое",
 }
+
 
 def validate_required_field(data: Dict[str, Any], field_name: str) -> bool:
     """
@@ -43,7 +53,7 @@ def validate_required_field(data: Dict[str, Any], field_name: str) -> bool:
 def validate_field_type(
     data: Dict[str, Any],
     field_name: str,
-    expected_type: Type
+    expected_type
 ) -> bool:
     """
     Проверяет что поле существует и имеет правильный тип.
@@ -108,6 +118,29 @@ def validate_enum(
 
     return value in allowed_values
 
+
+def _resolve_expected_type(expected_type):
+    """
+    Возвращает Python-тип для проверки или None, если тип не распознан
+    (например, парсер не смог определить тип поля по схеме).
+    """
+    if not expected_type:
+        return None
+
+    if isinstance(expected_type, str):
+        type_map = {
+            "string": str, "str": str,
+            "integer": int, "int": int,
+            "number": float, "float": float,
+            "array": list, "list": list,
+            "object": dict, "dict": dict,
+            "boolean": bool, "bool": bool,
+        }
+        return type_map.get(expected_type)
+
+    return expected_type
+
+
 class Validator:
     """
     Валидатор ответов Swordfish API.
@@ -127,7 +160,7 @@ class Validator:
 
         Принимает:
             response      — объект Response от http_client,
-                           или None если сервер недоступен
+                            или None если сервер недоступен
             rule          — словарь правил из parser.py:
                            {
                              "endpoint": "/redfish/v1/",
@@ -156,7 +189,24 @@ class Validator:
         """
         results = []
 
-        #Проверка 1: Доступность эндпоинта
+        # Проверка 0: ресурс вообще известен верификатору
+        # (нет ни встроенного правила, ни данных из загруженной спецификации)
+        if not rule or not rule.get("endpoint"):
+            results.append(self._result(
+                resource_name, rule or {},
+                check="Поддержка ресурса верификатором",
+                status="NOT_SUPPORTED",
+                detail=(
+                    f"Ресурс '{resource_name}' не описан ни во встроенных "
+                    f"правилах, ни в загруженной версии спецификации — "
+                    f"текущая версия верификатора не может его проверить."
+                ),
+                expected="описание ресурса в спецификации",
+                actual="нет данных"
+            ))
+            return results
+
+        # Проверка 1: Доступность эндпоинта
         if response is None:
             results.append(self._result(
                 resource_name, rule,
@@ -195,7 +245,7 @@ class Validator:
                 spec_section="Раздел 8.5 — HTTP status codes"
             ))
 
-        #Проверка 3: Валидный JSON
+        # Проверка 3: Валидный JSON
         try:
             body = response.json()
             results.append(self._result(
@@ -212,10 +262,7 @@ class Validator:
                 resource_name, rule,
                 check="Ответ является валидным JSON",
                 status="FAIL",
-                detail=(
-                    "Ответ не является валидным JSON. "
-                    "Все ответы Swordfish API должны быть в формате JSON."
-                ),
+                detail="Тело ответа не удалось разобрать как JSON",
                 expected="валидный JSON",
                 actual="невалидный ответ",
                 spec_section="Раздел 7 — Schema Considerations"
@@ -226,10 +273,10 @@ class Validator:
         # Проверки 4-6: Поля из правил
         required_fields = rule.get("required_fields", {})
 
-        # Запускаем проверки полей 
+        # Запускаем проверки полей
         field_results = validate_resource(body, required_fields)
 
-        # Конвертируем результаты 
+        # Конвертируем результаты
         for fr in field_results:
             results.append({
                 "resource": resource_name,
@@ -290,14 +337,16 @@ def validate_resource(
                 "Id": {
                     "type": str,
                     "description": "...",
-                    "spec": "..."},
+                    "spec": "...",
+                    "enum": ["A", "B"]  # опционально
+                },
             }
 
     Возвращает:
         список словарей, каждый из которых описывает одну проверку поля:
         {
             "check":        "Поле: Id",
-            "status":       "PASS" / "FAIL",
+            "status":       "PASS" / "FAIL" / "NOT_SUPPORTED",
             "detail":       "пояснение",
             "expected":     "ожидаемое значение",
             "actual":       "фактическое значение",
@@ -326,32 +375,85 @@ def validate_resource(
             continue
 
         # 2. Проверка типа данных
-        if expected_type:
-            type_valid = validate_field_type(data, field_name, expected_type)
-            if not type_valid:
-                expected_name = TYPE_NAMES.get(expected_type, str(expected_type))
-                actual_name = TYPE_NAMES.get(type(actual_value), str(type(actual_value)))
+        resolved_type = _resolve_expected_type(expected_type)
+
+        if expected_type and resolved_type is None:
+            # Тип указан в схеме, но верификатор не смог его распознать
+            # (например, незнакомое имя JSON-типа) — не подставляем
+            # str "по умолчанию", а честно сообщаем, что не поддерживаем.
+            results.append({
+                "check": f"Поле: {field_name}",
+                "status": "NOT_SUPPORTED",
+                "detail": (
+                    f"Тип поля '{field_name}' ('{expected_type}') не "
+                    f"распознан текущей версией верификатора — проверка "
+                    f"типа пропущена."
+                ),
+                "expected": f"тип: {expected_type}",
+                "actual": str(actual_value),
+                "spec_section": spec_section
+            })
+            continue
+
+        if resolved_type is None:
+            # Тип поля вообще не определён по спецификации
+            results.append({
+                "check": f"Поле: {field_name}",
+                "status": "NOT_SUPPORTED",
+                "detail": (
+                    f"Тип поля '{field_name}' не определён в загруженной "
+                    f"версии спецификации — проверка типа не поддерживается "
+                    f"текущей версией верификатора."
+                ),
+                "expected": "тип не определён",
+                "actual": str(actual_value),
+                "spec_section": spec_section
+            })
+            continue
+
+        type_valid = validate_field_type(data, field_name, resolved_type)
+        if not type_valid:
+            expected_name = TYPE_NAMES.get(resolved_type, str(resolved_type))
+            actual_name = TYPE_NAMES.get(type(actual_value), str(type(actual_value)))
+            results.append({
+                "check": f"Поле: {field_name}",
+                "status": "FAIL",
+                "detail": (
+                    f"Поле '{field_name}' имеет неверный тип. "
+                    f"Ожидается: {expected_name}, "
+                    f"получен: {actual_name} "
+                    f"(значение: {actual_value})"
+                ),
+                "expected": expected_name,
+                "actual": actual_name,
+                "spec_section": spec_section
+            })
+            continue
+
+        # 3. Проверка enum, если задан в схеме
+        allowed_values = field_info.get("enum") or []
+        if allowed_values:
+            if not validate_enum(data, field_name, allowed_values):
                 results.append({
-                    "check": f"Поле: {field_name}",
+                    "check": f"Значение поля: {field_name}",
                     "status": "FAIL",
                     "detail": (
-                        f"Поле '{field_name}' имеет неверный тип. "
-                        f"Ожидается: {expected_name}, "
-                        f"получен: {actual_name} "
-                        f"(значение: {actual_value})"
+                        f"Значение поля '{field_name}' ('{actual_value}') "
+                        f"не входит в список допустимых значений спецификации: "
+                        f"{allowed_values}."
                     ),
-                    "expected": expected_name,
-                    "actual": actual_name,
+                    "expected": f"одно из: {allowed_values}",
+                    "actual": str(actual_value),
                     "spec_section": spec_section
                 })
                 continue
 
-        # 3. Все проверки пройдены
+        # 4. Все проверки пройдены
         results.append({
             "check": f"Поле: {field_name}",
             "status": "PASS",
             "detail": f"Поле '{field_name}' прошло все проверки.",
-            "expected": f"тип: {TYPE_NAMES.get(expected_type, str(expected_type)) if expected_type else 'любой'}",
+            "expected": f"тип: {TYPE_NAMES.get(resolved_type, str(resolved_type))}",
             "actual": str(actual_value),
             "spec_section": spec_section
         })
